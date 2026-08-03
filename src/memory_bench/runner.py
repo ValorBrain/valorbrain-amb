@@ -189,7 +189,26 @@ class EvalRunner:
             logger.info("[query:%s] answer done in %.1fs (retrieve=%.0fms)", q.id, time.perf_counter() - t_start, answer_result.retrieve_time_ms)
 
             score: float | None = None
-            if not answer_result.context:
+            coding_trajectory = coding_git_history = None
+            if task_type == "coding":
+                # The CodingMode already built the repo, ran the agent (with interventions), and graded
+                # by pytest. Correctness is solve-ness, not a judged answer; carry the metrics through.
+                raw = answer_result.raw_response or {}
+                correct = bool(raw.get("solved"))
+                judge_reason = f"interventions={raw.get('interventions')} pytest={(raw.get('final_pytest') or '')[:80]}"
+                q.meta.update({k: raw.get(k) for k in
+                               ("solved", "interventions", "capped", "cost_usd", "turns", "wall_s",
+                                "final_pytest", "tokens", "agent", "model")
+                               if raw.get(k) is not None})
+                # Agent-view payload: the patch is the "answer", injected memory the "context",
+                # and the step trace + repo history land as row fields (view: "agent" in _save).
+                if raw.get("final_patch"):
+                    answer_result.answer = raw["final_patch"]
+                if raw.get("memory_context"):
+                    answer_result.context = raw["memory_context"]
+                coding_trajectory = raw.get("trajectory")
+                coding_git_history = raw.get("git_history")
+            elif not answer_result.context:
                 correct, judge_reason = False, "empty context — no memories retrieved"
             elif task_type == "mcq":
                 correct, judge_reason = _score_mcq(answer_result.answer, q.gold_answers)
@@ -235,6 +254,8 @@ class EvalRunner:
                 score=score,
                 meta=q.meta,
                 raw_response=None,  # skip storing to conserve disk space
+                trajectory=coding_trajectory,
+                git_history=coding_git_history,
                 category_axes=dataset.get_result_categories(q.meta),
             )
 
@@ -334,7 +355,8 @@ class EvalRunner:
                         accuracy=0.0, ingestion_time_ms=round(ingestion_ms, 1),
                         ingested_docs=ingested_docs_count,
                         description=description, answer_llm=mode.llm_id,
-                        judge_llm=self._get_judge(dataset)._llm.model_id, results=[r for r in all_results if r],
+                        judge_llm=(None if dataset.task_type == "coding" else self._get_judge(dataset)._llm.model_id),
+                        results=[r for r in all_results if r],
                     )
                     self._save(partial)
 
@@ -357,7 +379,8 @@ class EvalRunner:
                 memory.ingest(documents)
                 ingestion_ms = (time.perf_counter() - t0) * 1000
                 ingested_docs_count = len(documents)
-                console.print(f"  ingested in {ingestion_ms:.0f}ms ({ingestion_ms / len(documents):.1f}ms/doc avg)\n")
+                avg = f" ({ingestion_ms / len(documents):.1f}ms/doc avg)" if documents else ""
+                console.print(f"  ingested in {ingestion_ms:.0f}ms{avg}\n")
 
             async def _run_all(progress, task_id):
                 concurrency = getattr(memory, "concurrency", _CONCURRENCY)
@@ -408,10 +431,14 @@ class EvalRunner:
             ingested_docs=ingested_docs_count,
             description=description,
             answer_llm=mode.llm_id,
-            judge_llm=self._get_judge(dataset)._llm.model_id,
+            judge_llm=(None if dataset.task_type == "coding" else self._get_judge(dataset)._llm.model_id),
             results=results,
         )
-        self._save(summary)
+        # Final save truncates to THIS run's query set: without it, a later smaller run (e.g. -q 6)
+        # keeps stale rows from an earlier larger run under the same run name, and the output file
+        # silently reads as a bigger run than actually happened. Partial saves (mid-run, above)
+        # deliberately do NOT truncate — they accumulate units as they complete.
+        self._save(summary, query_ids={q.id for q in queries})
         memory.cleanup()
         return summary
 
@@ -444,12 +471,17 @@ class EvalRunner:
     def _load_previous_ingested_docs(self, dataset: str, split: str, memory: str, mode: str) -> int:
         return self._load_previous(dataset, split, memory, mode).get("ingested_docs", 0)
 
-    def _save(self, summary: EvalSummary) -> None:
+    def _save(self, summary: EvalSummary, query_ids: set | None = None) -> None:
         path = self._output_path(summary.dataset, summary.split, summary.run_name, summary.mode)
         path.parent.mkdir(parents=True, exist_ok=True)
-        # Always merge: new results overwrite existing ones by query_id, old ones are kept
+        # Always merge: new results overwrite existing ones by query_id, old ones are kept —
+        # except that a final save (query_ids given) drops rows outside this run's query set.
         merged = self._merge(summary.results, summary.dataset, summary.split, summary.run_name, summary.mode)
+        if query_ids is not None:
+            merged = [r for r in merged if r.query_id in query_ids]
         d = asdict(summary)
+        if summary.mode == "coding":
+            d["view"] = "agent"   # the UI's multi-turn agent renderer
         results_dicts      = [asdict(r) for r in merged]
         d["total_queries"] = len(merged)
         d["correct"]       = sum(1 for r in merged if r.correct)

@@ -9,8 +9,12 @@ from .mem0_cloud import Mem0CloudMemoryProvider
 from .hybrid_search import HybridSearchMemoryProvider
 from .ogham import OghamMemoryProvider
 from .supermemory import SupermemoryMemoryProvider
+from .none import NoMemoryProvider
+from .hscoding import HsCodingProvider
 
 REGISTRY: dict[str, type[MemoryProvider]] = {
+    "vanilla": NoMemoryProvider,
+    "hindsight-coding": HsCodingProvider,
     "bm25": BM25MemoryProvider,
     "cognee": CogneeMemoryProvider,
     "hindsight": HindsightMemoryProvider,
@@ -25,6 +29,9 @@ REGISTRY: dict[str, type[MemoryProvider]] = {
     "qdrant": HybridSearchMemoryProvider,
     "supermemory": SupermemoryMemoryProvider,
 }
+# legacy aliases (docs/scripts used these); canonical names above
+REGISTRY["none"] = NoMemoryProvider
+REGISTRY["hscoding"] = HsCodingProvider
 
 
 def get_memory_provider(name: str) -> MemoryProvider:
