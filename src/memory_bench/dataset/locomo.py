@@ -284,6 +284,7 @@ If it's correct, set correct=true.
         category: str | None = None,
         limit: int | None = None,
         ids: set[str] | None = None,
+        user_ids: set[str] | None = None,
     ) -> list[Document]:
         data = self._load_raw()
         documents: list[Document] = []
