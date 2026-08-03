@@ -107,20 +107,20 @@ class ValorBrainMemoryProvider(MemoryProvider):
     def retrieve(
         self,
         query: str,
-        k: int = 10,
+        k: int = 20,
         user_id: str | None = None,
         query_timestamp: str | None = None,
     ) -> tuple[list[Document], dict | None]:
         collection = user_id or "amb-default"
 
-        # Use /search (hybrid BM25+dense+RRF+rerank) — the core retrieval path.
+        # Use /search (hybrid BM25+dense+RRF+rerank) with full content.
+        # k defaults to 20 for broader coverage — the AMB RAG mode joins
+        # multiple memories, and more chunks = more facts available.
         body: dict = {
             "query": query,
             "mode": "hybrid",
             "limit": k,
             "collection": collection,
-            # compact=False returns full document bodies, not truncated snippets.
-            # The AMB needs enough context per result for the generation LLM.
             "compact": False,
         }
 
@@ -133,20 +133,13 @@ class ValorBrainMemoryProvider(MemoryProvider):
         results = data.get("results", [])
         docs: list[Document] = []
         for r in results:
-            # Prefer full body over snippet for richer context.
             content = (
-                r.get("body")
-                or r.get("content")
-                or r.get("text")
-                or r.get("snippet")
-                or ""
+                r.get("body") or r.get("content")
+                or r.get("text") or r.get("snippet") or ""
             )
-            docs.append(
-                Document(
+            if content:
+                docs.append(Document(
                     id=r.get("docid") or r.get("id") or r.get("path", ""),
-                    content=content,
-                    user_id=user_id,
-                )
-            )
-
+                    content=content, user_id=user_id,
+                ))
         return docs, data
