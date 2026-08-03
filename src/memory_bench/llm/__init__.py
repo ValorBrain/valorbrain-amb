@@ -5,12 +5,14 @@ from .gemini import GeminiLLM
 from .groq import GroqLLM
 from .gateway import GatewayLLM
 from .openai import OpenAILLM
+from .glm import GlmLLM
 
 REGISTRY: dict[str, type[LLM]] = {
     "gemini": GeminiLLM,
     "groq": GroqLLM,
     "openai": OpenAILLM,
     "gateway": GatewayLLM,
+    "glm": GlmLLM,
 }
 
 
