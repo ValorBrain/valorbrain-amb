@@ -3,12 +3,14 @@ import os
 from .base import LLM, Schema
 from .gemini import GeminiLLM
 from .groq import GroqLLM
+from .gateway import GatewayLLM
 from .openai import OpenAILLM
 
 REGISTRY: dict[str, type[LLM]] = {
     "gemini": GeminiLLM,
     "groq": GroqLLM,
     "openai": OpenAILLM,
+    "gateway": GatewayLLM,
 }
 
 

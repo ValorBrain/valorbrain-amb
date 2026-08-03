@@ -42,6 +42,11 @@ class EvalRunner:
         self._judge = GeminiJudge()
 
     def _get_judge(self, dataset: Dataset) -> "GeminiJudge":
+        # Respect OMB_JUDGE_LLM when set; fall back to dataset default.
+        import os
+        override = os.environ.get("OMB_JUDGE_LLM")
+        if override and override != "gemini":
+            return self._judge
         dataset_llm = dataset.default_judge_llm() if hasattr(dataset, "default_judge_llm") else None
         if dataset_llm is not None:
             return GeminiJudge(llm=dataset_llm)
