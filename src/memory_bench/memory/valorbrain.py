@@ -113,19 +113,41 @@ class ValorBrainMemoryProvider(MemoryProvider):
     ) -> tuple[list[Document], dict | None]:
         collection = user_id or "amb-default"
 
-        # Use /search (hybrid BM25+dense+RRF+rerank) with full content.
-        # k defaults to 20 for broader coverage — the AMB RAG mode joins
-        # multiple memories, and more chunks = more facts available.
+        # Use /api/v1/memory/prepare — the SAME pipeline production uses
+        # (funnel + multitrecho + consolidation + rerank). The response
+        # includes `funnel.delivered_documents` with the actual content
+        # chunks, consumer-agnostic. One endpoint, validated by benchmark,
+        # used in production.
         body: dict = {
-            "query": query,
-            "mode": "hybrid",
-            "limit": k,
+            "message": query,
             "collection": collection,
-            "compact": False,
         }
 
         try:
-            data = self._post("/search", body, timeout=60)
+            data = self._post("/api/v1/memory/prepare", body, timeout=60)
+            funnel = data.get("funnel") or {}
+            delivered = funnel.get("delivered_documents", [])
+            if delivered:
+                docs = [
+                    Document(
+                        id=d.get("path", ""),
+                        content=d.get("content", ""),
+                        user_id=user_id,
+                    )
+                    for d in delivered
+                    if d.get("content")
+                ]
+                if docs:
+                    return docs, data
+        except Exception as e:
+            logger.warning("ValorBrain prepare failed: %s", e)
+
+        # Fallback: raw /search if prepare fails or returns nothing
+        try:
+            data = self._post("/search", {
+                "query": query, "mode": "hybrid", "limit": k,
+                "collection": collection, "compact": False,
+            }, timeout=60)
         except Exception as e:
             logger.warning("ValorBrain retrieve failed: %s", e)
             return [], {"error": str(e)}
