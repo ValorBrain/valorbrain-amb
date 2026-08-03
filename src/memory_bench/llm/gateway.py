@@ -55,7 +55,7 @@ class GatewayLLM(LLM):
         body = json.dumps({
             "model": self._model,
             "messages": [{"role": "user", "content": prompt}],
-            "max_tokens": 4096,
+            "max_tokens": 8192,
             "temperature": 0,
         }).encode("utf-8")
 

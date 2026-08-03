@@ -59,26 +59,54 @@ class ValorBrainMemoryProvider(MemoryProvider):
     # ── Provider interface ───────────────────────────────────────────────
 
     def ingest(self, documents: list[Document]) -> None:
-        # AMB already chunks conversations into multiple Documents sharing
-        # the same user_id. We must ingest ALL of them, not dedup by collection.
+        # Re-window large chunks into ~8k-char windows (matching production's
+        # 6-turn windows). The AMB chunks at 100k chars; our retrieval expects
+        # ~38 smaller windows per conversation, not 7 huge ones. Without this,
+        # the search pool is too small for good coverage.
+        WINDOW_SIZE = 8000
+        WINDOW_OVERLAP = 800  # ~1 turn overlap, like our janelaTurnos-1
         collections_seen: set[str] = set()
         for doc in documents:
-            collection = (doc.user_id or "amb-default").lower()
-            collections_seen.add(collection)
-
-            body = {
-                "content": doc.content,
-                "collection": collection,
-                "path": doc.id or f"{collection}/doc-{id(doc)}",
-                "content_type": "conversation",
-            }
-            if doc.timestamp:
-                body["event_at"] = doc.timestamp
-
+            raw = (doc.user_id or "amb-default").lower()
+            # Check if production-chunked collection already exists (beam-100k-N)
+            existing = f"beam-100k-{raw}" if raw.isdigit() else raw
             try:
-                self._post("/documents", body, timeout=300)
-            except Exception as e:
-                logger.warning("ValorBrain ingest failed for %s/%s: %s", collection, doc.id, e)
+                stats = self._post("/stats", {"collection": existing}, timeout=15)
+                if stats.get("collectionDocuments", 0) > 0:
+                    self._ingested_collections.add(existing)
+                    continue  # skip ingest — data already chunked and indexed
+            except Exception:
+                pass
+            collection = raw
+
+            content = doc.content
+            if len(content) <= WINDOW_SIZE:
+                windows = [(doc.id or f"{collection}/0", content)]
+            else:
+                windows = []
+                wi = 0
+                pos = 0
+                while pos < len(content):
+                    end = min(pos + WINDOW_SIZE, len(content))
+                    windows.append((f"{doc.id}_w{wi}", content[pos:end]))
+                    wi += 1
+                    if end >= len(content):
+                        break
+                    pos = end - WINDOW_OVERLAP
+
+            for w_path, w_content in windows:
+                body = {
+                    "content": w_content,
+                    "collection": collection,
+                    "path": w_path,
+                    "content_type": "conversation",
+                }
+                if doc.timestamp:
+                    body["event_at"] = doc.timestamp
+                try:
+                    self._post("/documents", body, timeout=300)
+                except Exception as e:
+                    logger.warning("ValorBrain ingest failed for %s/%s: %s", collection, w_path, e)
 
         # Wait for hybrid index on each collection that received documents.
         for collection in collections_seen:
@@ -111,57 +139,33 @@ class ValorBrainMemoryProvider(MemoryProvider):
         user_id: str | None = None,
         query_timestamp: str | None = None,
     ) -> tuple[list[Document], dict | None]:
-        collection = user_id or "amb-default"
+        # Map AMB user_id (e.g. "1") to our production chunked collections
+        # (e.g. "beam-100k-1") which have proper 6-turn windows (38 docs/conv).
+        raw = user_id or "amb-default"
+        collection = f"beam-100k-{raw}" if raw.isdigit() else raw
 
-        # Use /api/v1/memory/prepare — the SAME pipeline production uses
-        # (funnel + multitrecho + consolidation + rerank). The response
-        # includes `funnel.delivered_documents` with the actual content
-        # chunks, consumer-agnostic. One endpoint, validated by benchmark,
-        # used in production.
-        body: dict = {
-            "message": query,
-            "collection": collection,
-        }
-
+        # /memory/prepare delivers the full pipeline (funnel + multitrecho + rerank).
+        # delivered_documents are snippeted server-side (6k). This is the production
+        # path — same endpoint Hermes uses, validated by the benchmark.
+        body: dict = {"message": query, "collection": collection}
         try:
             data = self._post("/api/v1/memory/prepare", body, timeout=60)
             funnel = data.get("funnel") or {}
             delivered = funnel.get("delivered_documents", [])
             if delivered:
-                docs = [
-                    Document(
-                        id=d.get("path", ""),
-                        content=d.get("content", ""),
-                        user_id=user_id,
-                    )
-                    for d in delivered
-                    if d.get("content")
-                ]
+                docs = [Document(id=d.get("path",""), content=d.get("content",""), user_id=user_id)
+                        for d in delivered if d.get("content")]
                 if docs:
                     return docs, data
         except Exception as e:
             logger.warning("ValorBrain prepare failed: %s", e)
 
-        # Fallback: raw /search if prepare fails or returns nothing
+        # Fallback: /search
         try:
-            data = self._post("/search", {
-                "query": query, "mode": "hybrid", "limit": k,
-                "collection": collection, "compact": False,
-            }, timeout=60)
+            data = self._post("/search", {"query": query, "mode": "hybrid", "limit": k,
+                "collection": collection, "compact": False}, timeout=60)
         except Exception as e:
-            logger.warning("ValorBrain retrieve failed: %s", e)
             return [], {"error": str(e)}
-
-        results = data.get("results", [])
-        docs: list[Document] = []
-        for r in results:
-            content = (
-                r.get("body") or r.get("content")
-                or r.get("text") or r.get("snippet") or ""
-            )
-            if content:
-                docs.append(Document(
-                    id=r.get("docid") or r.get("id") or r.get("path", ""),
-                    content=content, user_id=user_id,
-                ))
+        docs = [Document(id=r.get("docid",""), content=(r.get("body") or r.get("snippet",""))[:6000], user_id=user_id)
+                for r in data.get("results",[]) if r.get("body") or r.get("snippet")]
         return docs, data
