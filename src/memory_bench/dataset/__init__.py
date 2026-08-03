@@ -3,8 +3,6 @@ from .beam import BEAMDataset
 from .lifebench import LifeBenchDataset
 from .locomo import LoComoDataset
 from .longmemeval import LongMemEvalDataset
-from .membench import MemBenchDataset
-from .memsim import MemSimDataset
 from .personamem import PersonaMemDataset
 from .sdebench import SdebenchDataset
 
@@ -12,10 +10,7 @@ REGISTRY: dict[str, type[Dataset]] = {
     "beam":         BEAMDataset,
     "lifebench":    LifeBenchDataset,
     "locomo":       LoComoDataset,
-    "longmemeval":  LongMemEvalDataset,
-    "membench":     MemBenchDataset,
-    "memsim":       MemSimDataset,
-    "personamem":   PersonaMemDataset,
+    "longmemeval":  LongMemEvalDataset,    "personamem":   PersonaMemDataset,
     "sdebench":     SdebenchDataset,
 }
 

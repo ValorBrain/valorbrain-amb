@@ -2,7 +2,6 @@
   "datasets": {
     "beam": {
       "description": "Long-context memory benchmark: 100 conversations (100K\u201310M tokens), 2 000 questions across 10 memory ability categories.",
-      "scoring_note": "Scoring follows the formula defined in the BEAM paper. Each question has a rubric with multiple items, and an LLM judge scores each item on a 0/0.5/1 scale; the question score is the average across its rubric items. For event ordering questions, Kendall tau-b rank correlation measures how well the predicted order matches the reference. The overall benchmark score is the mean of all individual question scores. Because partial credit is common (scoring 0.5 is straightforward) while achieving a perfect 1.0 requires nailing every rubric item, BEAM scores sit on a different scale than pass/fail benchmarks.",
       "task": "LLM-judged",
       "splits": [
         "100k",
@@ -13,7 +12,6 @@
     },
     "lifebench": {
       "description": "Long-horizon multi-source personalized memory benchmark across 10 users.",
-      "scoring_note": "An LLM judge compares each answer against a gold-standard reference and grades it pass or fail. The overall score is the pass rate across all questions.",
       "task": "LLM-judged",
       "splits": [
         "en"
@@ -21,7 +19,6 @@
     },
     "locomo": {
       "description": "Multi-session long-term conversations with 1,986 QA pairs.",
-      "scoring_note": "An LLM judge compares each answer against a gold-standard reference and grades it pass or fail. The overall score is the pass rate across all questions.",
       "task": "LLM-judged",
       "splits": [
         "locomo10"
@@ -29,66 +26,45 @@
     },
     "longmemeval": {
       "description": "Long-term memory evaluation in LLM-based chat assistants.",
-      "scoring_note": "An LLM judge compares each answer against a gold-standard reference and grades it pass or fail, with special handling for time and date questions. The overall score is the pass rate across all questions.",
       "task": "LLM-judged",
       "splits": [
         "s"
       ]
     },
-    "membench": {
-      "description": "Agent memory at different abstraction levels and perspectives.",
-      "scoring_note": "Multiple-choice questions with a single correct answer. The model must select the right option; the score is the fraction of questions answered correctly.",
-      "task": "MCQ",
-      "splits": [
-        "FirstAgentLowLevel",
-        "FirstAgentHighLevel",
-        "ThirdAgentLowLevel",
-        "ThirdAgentHighLevel"
-      ]
-    },
-    "memsim": {
-      "description": "Chinese daily-life memory simulation with diverse QA types.",
-      "scoring_note": "Multiple-choice questions with a single correct answer. The model must select the right option; the score is the fraction of questions answered correctly.",
-      "task": "MCQ",
-      "splits": [
-        "simple",
-        "conditional",
-        "comparative",
-        "aggregative",
-        "post_processing",
-        "noisy"
-      ]
-    },
     "personamem": {
       "description": "Long-horizon personal preference tracking across conversation sessions.",
-      "scoring_note": "Multiple-choice questions with a single correct answer. The model must select the right option; the score is the fraction of questions answered correctly.",
       "task": "MCQ",
       "splits": [
         "32k",
         "128k",
         "1M"
       ]
+    },
+    "sdebench": {
+      "description": "Does memory help a coding agent? Bug-fix tasks whose obvious fix fails a hidden test.",
+      "task": "LLM-judged",
+      "splits": [
+        "boltons"
+      ]
     }
   },
   "providers": {
-    "bm25": {
-      "key": "bm25",
-      "description": "Keyword search baseline. No embeddings \u2014 splits docs into chunks and uses BM25 ranking.",
+    "vanilla": {
+      "key": "none",
+      "description": "No memory system (vanilla baseline).",
       "kind": "local",
       "link": null,
       "logo": null
     },
-    "cognee": {
-      "key": "cognee",
-      "description": "Graph-based knowledge extraction with FastEmbed (BAAI/bge-small-en-v1.5) + OpenAI LLM.",
-      "kind": "local",
-      "link": "https://cognee.ai",
-      "logo": "https://www.google.com/s2/favicons?sz=32&domain=cognee.ai"
-    },
     "hindsight": {
-      "link": "https://hindsight.vectorize.io",
-      "logo": "https://www.google.com/s2/favicons?sz=32&domain=hindsight.vectorize.io",
+      "link": "https://github.com/vectorize-io/hindsight",
+      "logo": null,
       "variants": {
+        "coding-plugin": {
+          "key": "hscoding",
+          "description": "Hindsight coding-agents plugin: deepen-engine ingestion, agent-side reflect+inject.",
+          "kind": "local"
+        },
         "local": {
           "key": "hindsight",
           "description": "Embedded Hindsight fact store using gemini-2.5-flash-lite as the extraction model. Recall uses all memory types (world + experience + observation) with no type filter applied.",
@@ -105,6 +81,20 @@
           "kind": "cloud"
         }
       }
+    },
+    "bm25": {
+      "key": "bm25",
+      "description": "Keyword search baseline. No embeddings \u2014 splits docs into chunks and uses BM25 ranking.",
+      "kind": "local",
+      "link": null,
+      "logo": null
+    },
+    "cognee": {
+      "key": "cognee",
+      "description": "Graph-based knowledge extraction with FastEmbed (BAAI/bge-small-en-v1.5) + OpenAI LLM.",
+      "kind": "local",
+      "link": "https://cognee.ai",
+      "logo": "https://www.google.com/s2/favicons?sz=32&domain=cognee.ai"
     },
     "mastra": {
       "key": "mastra",
@@ -126,13 +116,24 @@
       "variants": {
         "local": {
           "key": "mem0",
-          "description": "Agentic memory with Gemini 2.0 Flash for reflective extraction + local Qdrant store.",
+          "description": "Agentic memory with Gemini 2.5 Flash for reflective extraction + local Qdrant store.",
           "kind": "local"
         },
         "cloud": {
           "key": "mem0-cloud",
           "description": "Mem0 cloud API. Async indexing \u2014 waits for indexing to complete before eval. k=20.",
           "kind": "cloud"
+        }
+      }
+    },
+    "ogham": {
+      "link": "https://ogham-mcp.dev",
+      "logo": null,
+      "variants": {
+        "local": {
+          "key": "ogham",
+          "description": "Ogham MCP: hybrid vector + BM25 search with entity overlap boost. Local Postgres + pgvector. Stores verbatim conversations and retrieves via Reciprocal Rank Fusion with optional read-time fact extraction.",
+          "kind": "local"
         }
       }
     },
@@ -160,6 +161,9 @@
     },
     "agent": {
       "description": "Bypasses the benchmark retrieval pipeline entirely \u2014 calls the provider's own native direct_answer() for providers that have built-in agentic answering."
+    },
+    "coding": {
+      "description": "Build the task repo, run a coding agent with test-feedback interventions, grade by pytest."
     }
   }
 }
