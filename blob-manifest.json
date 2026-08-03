@@ -99,5 +99,77 @@
   "outputs/beam/hindsight/single-query/10m.json.gz": {
     "sha": "594f4d8f1fe3158ea4f144fdf90be55c578505e698ef644d992a4c5c66b60fad",
     "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/beam/hindsight/single-query/10m.json-E0CaKGmXRhxJQehl9laFAOnWTiK8N2.gz"
+  },
+  "outputs/sdebench/vanilla-claude-1/coding/boltons.json.gz": {
+    "sha": "9eacb3dbaf71d4ed74057664c9df314aad2ee6be3a616f39baefcb4d08af6bc9",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/vanilla-claude-1/coding/boltons.json-S5arPT92qrY5unil9pdFIGllQIrXl4.gz"
+  },
+  "outputs/sdebench/vanilla-claude-2/coding/boltons.json.gz": {
+    "sha": "5d06c2975aa30740629a3d1c841db9c46f81170524fe4699d52a87d07182b5f4",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/vanilla-claude-2/coding/boltons.json-nkGjgZaRnXtvR5gAaYsVYeKSMam6uV.gz"
+  },
+  "outputs/sdebench/vanilla-claude-3/coding/boltons.json.gz": {
+    "sha": "8c87a7dd3d62ed6ab5322b5f4e723a5a1acebd96e673ae2d6c750da35c0169ec",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/vanilla-claude-3/coding/boltons.json-ad5IRbGeXSUDROrRNSFK4u7stchUVl.gz"
+  },
+  "outputs/sdebench/vanilla-opencode-1/coding/boltons.json.gz": {
+    "sha": "3ff6831a2f8897cc4c6459cf151bb4ea203e328c3bf424ef511900ea32bf502a",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/vanilla-opencode-1/coding/boltons.json-k8faJ39TidDzIryVjqe8YJNfe8EUNv.gz"
+  },
+  "outputs/sdebench/vanilla-opencode-2/coding/boltons.json.gz": {
+    "sha": "59db2698bb3a818b04ac5524fd16d5b7cec9bdc7f9bcb2182cf022382fdfbef7",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/vanilla-opencode-2/coding/boltons.json-4IxhO4LYqjXP3YwuSXLUIv6k8CCGE4.gz"
+  },
+  "outputs/sdebench/vanilla-opencode-3/coding/boltons.json.gz": {
+    "sha": "ec46150ce605053e870f715c6ab9790abfbe87f4b84f4017c47fd13fe1d5bfa1",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/vanilla-opencode-3/coding/boltons.json-yBlkoommbxWPoRUzeqVfDEykFafwSZ.gz"
+  },
+  "outputs/sdebench/vanilla-codex-1/coding/boltons.json.gz": {
+    "sha": "77216dbc991329b64a5f945c8474df688536bcf843a9dd4f25ee90c18406b70b",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/vanilla-codex-1/coding/boltons.json-HIxFFPhRl7nGN6rqW689EaSyT2Mbi4.gz"
+  },
+  "outputs/sdebench/vanilla-codex-2/coding/boltons.json.gz": {
+    "sha": "24dd2c711402a2ea0b17d6ca100eb00f59c6a9097dd6e8230c3b84765bab7585",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/vanilla-codex-2/coding/boltons.json-iBDTbpd3arpiOjmAHjsnZK6jc6Vd65.gz"
+  },
+  "outputs/sdebench/vanilla-codex-3/coding/boltons.json.gz": {
+    "sha": "56fcc8a2c0fc6f3f3b73658f118f648669825183e507842f8afaf6a0d25a7a6a",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/vanilla-codex-3/coding/boltons.json-9z2ZLrxWaCmEyctKVgRfV5FOIgzzOc.gz"
+  },
+  "outputs/sdebench/hindsight-claude-1/coding/boltons.json.gz": {
+    "sha": "160f71f781a7abc79150e979d8c7664a18121cbc04fcb587507e4d4fc378259c",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/hindsight-claude-1/coding/boltons.json-EHaoechzHI7f4gHHeiT59eLgOHpiQ8.gz"
+  },
+  "outputs/sdebench/hindsight-claude-2/coding/boltons.json.gz": {
+    "sha": "9d458db179c51310e9f49e3e9b6a49a63c8c4beae49eaeef01e52842e61f7e9c",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/hindsight-claude-2/coding/boltons.json-sISRlXAAznHGodU7MOQpK8H37Apa4Y.gz"
+  },
+  "outputs/sdebench/hindsight-claude-3/coding/boltons.json.gz": {
+    "sha": "5d6c569144988ef8c2bd9a708ddb8a3f3a0d8bf23b5a18a31450179990f4630a",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/hindsight-claude-3/coding/boltons.json-1HEKMZgr6zCymaPnVvTwTm3ybNyZgl.gz"
+  },
+  "outputs/sdebench/hindsight-opencode-1/coding/boltons.json.gz": {
+    "sha": "ed37061fd3ff57940968f33bc3db14bd96b1aa021806da6807adce32131c4a04",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/hindsight-opencode-1/coding/boltons.json-5xNUSA58ae2IBAeKaANbSc52ofBVBZ.gz"
+  },
+  "outputs/sdebench/hindsight-opencode-2/coding/boltons.json.gz": {
+    "sha": "843c53c94011e06a8ebc9c00abbd81d783de7521c4fe5ad0991992ecdd3eb7b2",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/hindsight-opencode-2/coding/boltons.json-CQSKTzf3f9I7ec6plruUDHVzBnq4RI.gz"
+  },
+  "outputs/sdebench/hindsight-opencode-3/coding/boltons.json.gz": {
+    "sha": "c6925e2a2bfec70dc3f7e15d4ef3afe57e71e746f34f7076c6b264fdcdc00a2f",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/hindsight-opencode-3/coding/boltons.json-tVk9VPwM3H0QBmxLc7eo4aZe4gsfFl.gz"
+  },
+  "outputs/sdebench/hindsight-codex-1/coding/boltons.json.gz": {
+    "sha": "1b2853d81b9058cdd079136d08e8d0a68fa9db0e5c4d82d31015c3025044975e",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/hindsight-codex-1/coding/boltons.json-KKHr07CSKQJGjYbNgovp5FgugkSSKH.gz"
+  },
+  "outputs/sdebench/hindsight-codex-2/coding/boltons.json.gz": {
+    "sha": "381256adde1a5215290c692bba4f72c4ff38587866d99b6d8ab18bb071dac6fa",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/hindsight-codex-2/coding/boltons.json-t3ycSaf8qgREFHJKJp7ocBluWXEKZP.gz"
+  },
+  "outputs/sdebench/hindsight-codex-3/coding/boltons.json.gz": {
+    "sha": "ed4f75626819b3aec8a4e54f6055818a7319b33af50c9cad0422b1048af1a477",
+    "url": "https://l4cy6iaq2c4g2ldt.public.blob.vercel-storage.com/outputs/sdebench/hindsight-codex-3/coding/boltons.json-CxbRJfNTqk9E13TtLWhHZPnrPVxvxp.gz"
   }
 }
