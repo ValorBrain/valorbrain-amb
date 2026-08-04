@@ -72,8 +72,8 @@ class RAGMode(ResponseMode):
             prompt = _DEFAULT_OPEN_PROMPT.format(context=context, query=query)
         data = self._llm.generate(prompt, _OPEN_SCHEMA)
         return AnswerResult(
-            answer=data["answer"],
-            reasoning=data["reasoning"],
+            answer=data.get("answer", ""),
+            reasoning=data.get("reasoning", ""),
             context=context,
             retrieve_time_ms=round(retrieve_ms, 1),
             raw_response=raw_response,
