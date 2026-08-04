@@ -13,14 +13,14 @@ Reproducible BEAM-100K results for [ValorBrain](https://valorbrain.valor.digital
 ## What's in this repo
 
 - `provider/valorbrain.py` — ValorBrain memory provider for AMB
-- `provider/glm.py` — GLM-5.2 LLM provider (Z.ai coding plan, handles reasoning_content)
+- `provider/glm.py` — GLM-5.2 LLM provider (any OpenAI-compatible endpoint, handles reasoning_content)
 - `provider/gateway.py` — Generic OpenAI-compatible LLM provider (no response_format dependency)
 - `results/` — Benchmark result JSONs
 - `REPRODUCE.md` — Step-by-step reproduction guide
 
 ## Key finding
 
-58% of our total improvement (22.5 points) came from reader-agnostic memory engineering — consolidation, timeline, and delivery improvements that benefit any LLM. The reader swap (deepseek → GLM-5.2) contributed 42%.
+58% of our total improvement (22.5 points) came from reader-agnostic memory engineering. Consolidation, timeline, and delivery improvements that benefit any LLM. The reader swap (deepseek to GLM-5.2) contributed 42%.
 
 Full analysis: [Memory Quality Beats Reader Quality](https://valorbrain.valor.digital/research/memory-quality-beats-reader-quality-beam-100k)
 
@@ -39,13 +39,17 @@ cp /path/to/valorbrain-amb/provider/gateway.py src/memory_bench/llm/
 
 # 3. Register providers (see REPRODUCE.md)
 
-# 4. Run
+# 4. Configure your LLM endpoints
 export VALORBRAIN_URL=http://localhost:7438
 export VALORBRAIN_TOKEN=your-token
-export GLM_API_KEY=your-zai-key
+export GLM_BASE_URL=your-glm-endpoint    # any OpenAI-compatible GLM provider
+export GLM_API_KEY=your-key
+export OPENAI_API_KEY=your-gateway-key   # for the judge LLM
+export OPENAI_BASE_URL=your-gateway-url
 export OMB_ANSWER_LLM=glm
 export OMB_JUDGE_LLM=gateway
 
+# 5. Run
 amb run --dataset beam --split 100k --memory valorbrain --llm glm
 ```
 

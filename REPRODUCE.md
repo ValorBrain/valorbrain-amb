@@ -3,7 +3,7 @@
 ## Prerequisites
 
 1. A running ValorBrain engine instance (default: `http://localhost:7438`)
-2. A Z.ai coding plan API key (for GLM-5.2)
+2. A GLM-5.2 API endpoint (any OpenAI-compatible provider)
 3. An OpenAI-compatible gateway (for deepseek-v4-flash as judge)
 
 ## Step 1: Install the Agent Memory Benchmark
@@ -77,7 +77,7 @@ export VALORBRAIN_BENCHMARK_TENANT_ID=your-tenant-id
 export OPENAI_API_KEY=your-gateway-key
 export OPENAI_BASE_URL=http://localhost:8201/v1
 export GLM_API_KEY=your-zai-key
-export GLM_BASE_URL=https://api.z.ai/api/coding/paas/v4
+export GLM_BASE_URL=your-glm-endpoint  # any OpenAI-compatible GLM provider
 export GLM_MODEL=glm-5.2
 export OMB_ANSWER_LLM=glm
 export OMB_JUDGE_LLM=gateway

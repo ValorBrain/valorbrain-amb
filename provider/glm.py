@@ -1,8 +1,14 @@
 """
-GLM-5.2 LLM for AMB — via Z.ai coding plan endpoint.
+GLM-5.2 LLM for AMB — works with any OpenAI-compatible endpoint.
 
 GLM-5.2 is a reasoning model: outputs reasoning_content separately from content.
-Uses prompt-based JSON extraction (Z.ai doesn't support response_format).
+This provider handles that fallback and uses prompt-based JSON extraction
+(endpoints that don't support response_format).
+
+Configuration:
+  GLM_BASE_URL  — your GLM API endpoint (OpenAI-compatible)
+  GLM_API_KEY   — your API key
+  GLM_MODEL     — model name (default: glm-5.2)
 """
 
 import json
@@ -13,14 +19,14 @@ from .gateway import GatewayLLM
 
 
 class GlmLLM(GatewayLLM):
-    """GLM-5.2 via Z.ai coding plan. Expensive per-request, use sparingly."""
+    """GLM-5.2 via any OpenAI-compatible endpoint."""
 
     def __init__(self, model: str | None = None):
-        self._base = os.environ.get(
-            "GLM_BASE_URL", "https://api.z.ai/api/coding/paas/v4"
-        ).rstrip("/")
+        self._base = os.environ.get("GLM_BASE_URL", "").rstrip("/")
         self._key = os.environ.get("GLM_API_KEY", "")
         self._model = model or os.environ.get("GLM_MODEL", "glm-5.2")
+        if not self._base:
+            raise ValueError("GLM_BASE_URL environment variable is required. Set it to your GLM provider's OpenAI-compatible endpoint.")
 
     @property
     def model_id(self) -> str:
