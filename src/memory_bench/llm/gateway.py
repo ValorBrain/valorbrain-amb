@@ -95,4 +95,4 @@ class GatewayLLM(LLM):
                 pass
 
         # Last resort: return empty fields
-        return {field: "" for field in ["reasoning", "answer", "choice"]}
+        return {field: "" for field in ["reasoning", "answer", "choice", "reason", "correct"]}
