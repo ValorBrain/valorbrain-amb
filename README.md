@@ -180,6 +180,74 @@ Headline: **80.8% on BEAM-100K** (323/400) with stealth/ox-alpha as reader at `r
 
 ---
 
+## Per-category (400 queries)
+
+| Category | ValorBrain | Hindsight (sq) | Gap |
+|----------|-----------|----------------|-----|
+| Information Extraction | **88.9%** | 64.9% | +24.0 |
+| Temporal Reasoning | **71.9%** | 57.5% | +14.4 |
+| Knowledge Update | **70.6%** | 58.8% | +11.8 |
+| Multi-session Reasoning | **57.2%** | 47.4% | +9.8 |
+| Contradiction Resolution | **67.2%** | 61.6% | +5.6 |
+| Preference Following | 91.0% | 95.0% | -4.0 |
+| Instruction Following | 83.8% | 91.2% | -7.5 |
+| Summarization | 64.5% | 79.3% | -14.8 |
+| Event Ordering | 46.4% | 80.5% | -34.1 |
+| Abstention | 67.5% | 97.5% | -30.0 |
+
+
+
+## Per-category — ox-alpha effort=max (80.8%)
+
+
+| Category | Default effort (78.2%) | Max effort (80.8%) | Δ |
+|----------|-----------------------:|-------------------:|---:|
+| Preference Following | 90.0% | **100%** | +10.0 |
+| Information Extraction | 87.5% | 92.5% | +5.0 |
+| Instruction Following | 87.5% | 92.5% | +5.0 |
+| Temporal Reasoning | 70.0% | 75.0% | +5.0 |
+| Contradiction Resolution | 92.5% | 95.0% | +2.5 |
+| Knowledge Update | 62.5% | 65.0% | +2.5 |
+| Multi-session Reasoning | 75.0% | 77.5% | +2.5 |
+| Summarization | 90.0% | 87.5% | -2.5 |
+| Abstention | 65.0% | 65.0% | 0.0 |
+| Event Ordering | 62.5% | 57.5% | -5.0 |
+
+
+## Key finding
+
+58% of our total improvement came from reader-agnostic memory engineering. Consolidation, timeline, and delivery improvements that benefit any LLM. The reader swap contributed 42%.
+
+Full analysis: [Memory Quality Beats Reader Quality](https://valorbrain.valor.digital/research/memory-quality-beats-reader-quality-beam-100k)
+
+## Reproducing
+
+ValorBrain is a hosted memory API. To reproduce our results:
+
+1. **Create a ValorBrain account** at [valorbrain.valor.digital](https://valorbrain.valor.digital)
+2. **Get your API key** from the dashboard
+3. **Install the AMB** with our provider (see [REPRODUCE.md](REPRODUCE.md))
+4. **Run the benchmark** with your API key
+
+This is the same model as Hindsight and mem0-cloud: proprietary engine, public API, reproducible results.
+
+## What's in this repo
+
+- `provider/valorbrain.py` — ValorBrain memory provider for AMB
+- `provider/glm.py` — GLM-5.2 LLM provider (any OpenAI-compatible endpoint)
+- `provider/gateway.py` — Generic OpenAI-compatible LLM provider
+- `provider/agy_direct.py` — Direct AGY CLI caller (Gemini via Antigravity)
+- `results/beam-100k-ox-alpha-effortmax-400q.json` — Official 400-query results, ox-alpha reader at reasoning effort=max (80.8%)
+- `results/beam-100k-glm-gemini-judge-400q.json` — Official 400-query results
+- `scripts/run-with-checkpoint.py` — Checkpoint runner (resume after interruptions)
+- `REPRODUCE.md` — Step-by-step reproduction guide
+
+## License
+
+MIT for the provider code. Benchmark results are public domain.
+
+---
+
 ## Requirements
 
 - Python ≥ 3.11
@@ -194,7 +262,6 @@ Headline: **80.8% on BEAM-100K** (323/400) with stealth/ox-alpha as reader at `r
 AMB was built to be honest about how Hindsight performs, because no existing benchmark gave the full picture. It is fully open: datasets, prompts, scoring logic, and results. Live leaderboard: **[agentmemorybenchmark.ai](https://agentmemorybenchmark.ai)**.
 
 **The problem with existing benchmarks.** LoComo and LongMemEval are solid datasets, but they were designed for 32k context windows. State-of-the-art models now have million-token context windows — on most instances a naive "dump everything into context" approach scores competitively, not because it's a good memory architecture, but because retrieval has become the easy part. Both datasets were also built around chatbot use cases; AMB adds datasets focused on agentic tasks.
-
 **What AMB measures.** Accuracy first (hardest to fake), with speed and token cost tracked alongside. A memory system that scores 90% accuracy but costs $10/user/day is not better than one that scores 82% at $0.10.
 
 **How it works.**
