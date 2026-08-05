@@ -5,7 +5,7 @@ ValorBrain is a hybrid memory engine: BM25 + dense vectors (pgvector) + RRF +
 graph reranking + BGE cross-encoder rerank, all on PostgreSQL with RLS.
 
 This provider talks to a running ValorBrain engine instance via its REST API.
-Set VALORBRAIN_URL (default http://localhost:7438) and VALORBRAIN_TOKEN.
+Set VALORBRAIN_URL (default https://valorbrain-api.valor.digital) and VALORBRAIN_TOKEN.
 
 Each AMB isolation unit (e.g. BEAM conversation) becomes a ValorBrain collection.
 """
@@ -33,7 +33,7 @@ class ValorBrainMemoryProvider(MemoryProvider):
     concurrency = 4
 
     def __init__(self):
-        self._base = os.environ.get("VALORBRAIN_URL", "http://localhost:7438").rstrip("/")
+        self._base = os.environ.get("VALORBRAIN_URL", "https://valorbrain-api.valor.digital").rstrip("/")
         self._token = os.environ.get("VALORBRAIN_TOKEN", "")
         self._tenant = os.environ.get("VALORBRAIN_BENCHMARK_TENANT_ID", "")
         self._ingested_collections: set[str] = set()
