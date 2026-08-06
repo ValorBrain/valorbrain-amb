@@ -112,6 +112,7 @@ class ValorBrainMemoryProvider(MemoryProvider):
         for collection in collections_seen:
             if collection not in self._ingested_collections:
                 self._wait_index(collection)
+                self._refine_collection(collection)
                 self._ingested_collections.add(collection)
 
     def _wait_index(self, collection: str, timeout: float = 120) -> None:
@@ -131,6 +132,29 @@ class ValorBrainMemoryProvider(MemoryProvider):
             except Exception:
                 pass
             time.sleep(2)
+
+    def _refine_collection(self, collection: str, timeout: float = 300) -> None:
+        """Extract observations + consolidate after ingest, before queries.
+
+        Without this, /memory/prepare queries arrive before Phase 1.5 has
+        extracted observations from the conversation docs. The answering LLM
+        gets raw text instead of pre-extracted facts.
+        """
+        try:
+            result = self._post(
+                "/api/v1/memory/refine",
+                {"collection": collection},
+                timeout=timeout,
+            )
+            logger.info(
+                "Refine %s: observed=%s extracted=%s consolidated=%s",
+                collection,
+                result.get("observed", 0),
+                result.get("extracted", 0),
+                result.get("consolidated", 0),
+            )
+        except Exception as e:
+            logger.warning("Refine failed for %s: %s (continuing)", collection, e)
 
     def retrieve(
         self,
