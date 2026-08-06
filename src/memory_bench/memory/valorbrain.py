@@ -78,6 +78,7 @@ class ValorBrainMemoryProvider(MemoryProvider):
             except Exception:
                 pass
             collection = raw
+            collections_seen.add(collection)
 
             content = doc.content
             if len(content) <= WINDOW_SIZE:
