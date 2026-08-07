@@ -230,8 +230,15 @@ class EvalRunner:
                 judge_llm = self._get_judge(dataset)._llm
                 score = await asyncio.to_thread(dataset.score_result, tmp_result, judge_llm)
                 score = float(score)
+                # Retry judge if answer is non-empty but score is 0 (likely judge failure).
+                # Observed: 45/400 questions get score=0 with valid answers due to
+                # AGY/Gemini quota or inconsistency. Retry once before accepting.
+                if score == 0.0 and answer_result.answer.strip():
+                    import time as _t
+                    _t.sleep(3)
+                    score = await asyncio.to_thread(dataset.score_result, tmp_result, judge_llm)
+                    score = float(score)
                 correct = score >= 0.5
-                judge_reason = f"score={score:.3f}"
             else:
                 # Use per-query judge if dataset supports it (e.g. LongMemEval has per-category prompts)
                 if hasattr(dataset, "get_judge_prompt_fn"):
