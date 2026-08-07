@@ -38,11 +38,24 @@ class GlmLLM(GatewayLLM):
             "Content-Type": "application/json",
             **({"Authorization": f"Bearer {self._key}"} if self._key else {}),
         }, method="POST")
-        with urllib.request.urlopen(req, timeout=180) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-            msg = data.get("choices", [{}])[0].get("message", {})
-            content = msg.get("content", "")
-            # GLM-5.2 puts output in reasoning_content when content is empty
-            if not content and msg.get("reasoning_content"):
-                content = msg["reasoning_content"]
-            return content
+        import time as _time
+        last_err = None
+        for attempt in range(3):
+            try:
+                with urllib.request.urlopen(req, timeout=180) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                    msg = data.get("choices", [{}])[0].get("message", {})
+                    content = msg.get("content", "")
+                    # GLM-5.2 puts output in reasoning_content when content is empty
+                    if not content and msg.get("reasoning_content"):
+                        content = msg["reasoning_content"]
+                    if content.strip():
+                        return content
+                    # Empty response — retry
+                    last_err = "empty response"
+            except Exception as e:
+                last_err = str(e)
+            if attempt < 2:
+                _time.sleep(5 * (attempt + 1))  # 5s, 10s backoff
+        # All retries failed — return what we have
+        return ""
