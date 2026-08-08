@@ -239,6 +239,7 @@ class EvalRunner:
                     score = await asyncio.to_thread(dataset.score_result, tmp_result, judge_llm)
                     score = float(score)
                 correct = score >= 0.5
+                judge_reason = f"score={score:.3f}"
             else:
                 # Use per-query judge if dataset supports it (e.g. LongMemEval has per-category prompts)
                 if hasattr(dataset, "get_judge_prompt_fn"):
