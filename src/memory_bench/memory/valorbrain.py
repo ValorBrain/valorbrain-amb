@@ -77,7 +77,7 @@ class ValorBrainMemoryProvider(MemoryProvider):
                     continue  # skip ingest — data already chunked and indexed
             except Exception:
                 pass
-            collection = raw
+            collection = existing  # use beam-100k-{raw} consistently with retrieve()
             collections_seen.add(collection)
 
             content = doc.content
@@ -178,8 +178,36 @@ class ValorBrainMemoryProvider(MemoryProvider):
             funnel = data.get("funnel") or {}
             delivered = funnel.get("delivered_documents", [])
             if delivered:
-                docs = [Document(id=d.get("path",""), content=d.get("content",""), user_id=user_id)
-                        for d in delivered if d.get("content")]
+                # Separate synthetic docs (digest, facts) from conversation windows.
+                # Embed synthetic as a header at the TOP of the first memory,
+                # so the reader sees it as context, not as competing memories.
+                synthetic = [d for d in delivered if d.get("path", "").startswith("__")]
+                conversations = [d for d in delivered if not d.get("path", "").startswith("__")]
+                
+                synth_text = ""
+                if synthetic:
+                    parts = []
+                    for d in synthetic:
+                        c = d.get("content", "").strip()
+                        if c:
+                            parts.append(c)
+                    synth_text = "\n\n".join(parts)
+                
+                docs = []
+                for i, d in enumerate(conversations):
+                    content = d.get("content", "")
+                    if not content:
+                        continue
+                    # Prepend synthetic context to the FIRST conversation doc
+                    if i == 0 and synth_text:
+                        content = (
+                            "=== CONVERSATION SUMMARY (use for factual questions) ===\n"
+                            + synth_text
+                            + "\n=== END SUMMARY ===\n\n"
+                            + content
+                        )
+                    docs.append(Document(id=d.get("path", ""), content=content, user_id=user_id))
+                
                 if docs:
                     return docs, data
         except Exception as e:
@@ -194,3 +222,4 @@ class ValorBrainMemoryProvider(MemoryProvider):
         docs = [Document(id=r.get("docid",""), content=(r.get("body") or r.get("snippet",""))[:6000], user_id=user_id)
                 for r in data.get("results",[]) if r.get("body") or r.get("snippet")]
         return docs, data
+
