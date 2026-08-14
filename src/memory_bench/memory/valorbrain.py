@@ -14,6 +14,7 @@ import json
 import logging
 import os
 import time
+import urllib.parse
 import urllib.request
 
 from ..models import Document
@@ -56,6 +57,28 @@ class ValorBrainMemoryProvider(MemoryProvider):
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             return json.loads(resp.read().decode("utf-8"))
 
+    def _get_stats_collection(self, collection: str, timeout: float = 30) -> dict:
+        """GET /stats?collection=X.
+
+        /stats is a GET endpoint; POSTing a body to it returns {"error": ...}.
+        The provider used _post("/stats", {...}) for both the exists-check and
+        the index-wait — both silently dead (every check saw an error response,
+        existence never matched, _wait_index burned its full 120s timeout per
+        collection). This GET uses the real contract: response carries
+        collectionDocuments / collectionHybridPending / collectionEmbedFailed.
+        """
+        url = f"{self._base}/stats?collection={urllib.parse.quote(collection)}"
+        req = urllib.request.Request(
+            url,
+            headers={
+                **({"x-tenant-id": self._tenant} if self._tenant else {}),
+                **({"Authorization": f"Bearer {self._token}"} if self._token else {}),
+            },
+            method="GET",
+        )
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+
     # ── Provider interface ───────────────────────────────────────────────
 
     def ingest(self, documents: list[Document]) -> None:
@@ -71,7 +94,7 @@ class ValorBrainMemoryProvider(MemoryProvider):
             # Check if production-chunked collection already exists (beam-100k-N)
             existing = f"beam-100k-{raw}" if raw.isdigit() else raw
             try:
-                stats = self._post("/stats", {"collection": existing}, timeout=15)
+                stats = self._get_stats_collection(existing, timeout=15)
                 if stats.get("collectionDocuments", 0) > 0:
                     self._ingested_collections.add(existing)
                     continue  # skip ingest — data already chunked and indexed
@@ -117,19 +140,24 @@ class ValorBrainMemoryProvider(MemoryProvider):
                 self._ingested_collections.add(collection)
 
     def _wait_index(self, collection: str, timeout: float = 120) -> None:
-        """Poll /stats until the collection's hybrid index is ready."""
+        """Poll GET /stats?collection= until the collection's hybrid index is ready.
+
+        Bails early when documents exist, nothing is pending, and some embeds
+        have permanently failed — those will not recover within the timeout
+        (the embed worker retries failed docs on an ~1h cadence), so waiting
+        the full window only stalls the run.
+        """
         deadline = time.time() + timeout
         while time.time() < deadline:
             try:
-                stats = self._post(
-                    "/stats",
-                    {"collection": collection},
-                    timeout=30,
-                )
+                stats = self._get_stats_collection(collection, timeout=30)
                 pending = stats.get("collectionHybridPending", 0)
                 total = stats.get("collectionDocuments", 0)
+                failed = stats.get("collectionEmbedFailed", 0)
                 if total > 0 and pending == 0:
                     return
+                if total > 0 and pending == failed and failed > 0:
+                    return  # everything indexed that will be indexed
             except Exception:
                 pass
             time.sleep(2)
