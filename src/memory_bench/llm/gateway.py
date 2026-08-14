@@ -52,10 +52,15 @@ class GatewayLLM(LLM):
 
     def _call(self, prompt: str) -> str:
         url = f"{self._base}/chat/completions"
+        # Reasoning models (deepseek-v4-flash) spend thousands of tokens on
+        # thinking before the content lands — 8192 starved long reader prompts
+        # and the empty content silently became an empty answer (same failure
+        # class the GLM judge had before its fix).
+        max_tokens = int(os.environ.get("OMB_GATEWAY_MAX_TOKENS", "16384"))
         body = json.dumps({
             "model": self._model,
             "messages": [{"role": "user", "content": prompt}],
-            "max_tokens": 8192,
+            "max_tokens": max_tokens,
             "temperature": 0,
         }).encode("utf-8")
 
@@ -71,7 +76,13 @@ class GatewayLLM(LLM):
 
         with urllib.request.urlopen(req, timeout=180) as resp:
             data = json.loads(resp.read().decode("utf-8"))
-            return data.get("choices", [{}])[0].get("message", {}).get("content", "")
+            msg = data.get("choices", [{}])[0].get("message", {})
+            content = (msg.get("content") or "").strip()
+            if content:
+                return content
+            # Reasoning fallback: when content is truncated away, the whole
+            # answer can live inside reasoning_content.
+            return (msg.get("reasoning_content") or "").strip()
 
     def _parse_json(self, text: str) -> dict:
         # Strip markdown fences if present
@@ -82,9 +93,12 @@ class GatewayLLM(LLM):
 
         # Try direct parse first
         try:
-            return json.loads(text)
+            parsed = json.loads(text)
         except json.JSONDecodeError:
-            pass
+            parsed = None
+
+        if isinstance(parsed, dict):
+            return parsed
 
         # Try to extract JSON object from text
         match = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', text, re.DOTALL)
@@ -93,6 +107,14 @@ class GatewayLLM(LLM):
                 return json.loads(match.group())
             except json.JSONDecodeError:
                 pass
+
+        # The model answered in prose (or a bare array) instead of the JSON
+        # object — that IS its answer, not an empty one. Ship it as answer
+        # instead of silently zeroing the query.
+        if isinstance(parsed, list):
+            return {"answer": json.dumps(parsed, ensure_ascii=False)}
+        if text:
+            return {"answer": text}
 
         # Last resort: return empty fields
         return {field: "" for field in ["reasoning", "answer", "choice", "reason", "correct"]}
