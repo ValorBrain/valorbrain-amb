@@ -69,6 +69,10 @@ class GatewayLLM(LLM):
             data=body,
             headers={
                 "Content-Type": "application/json",
+                # opencode.ai's edge 403s the default "Python-urllib/3.x" UA
+                # (WAF) while the same request from curl passes — send a
+                # neutral client UA instead.
+                "User-Agent": os.environ.get("OMB_GATEWAY_USER_AGENT", "amb-gateway/1.0"),
                 **({"Authorization": f"Bearer {self._key}"} if self._key else {}),
             },
             method="POST",
