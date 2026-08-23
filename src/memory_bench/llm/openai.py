@@ -8,6 +8,46 @@ _MAX_RETRIES = 6
 _RETRY_BASE_DELAY = 5
 
 
+
+def _extract_json(text: str | None) -> dict:
+    """Parse a JSON object out of an LLM reply.
+
+    Reasoning models routed via OpenRouter may ignore strict json_schema and
+    answer in prose, wrap the object in ```json fences, or prepend commentary.
+    Try direct parse first, then the outermost balanced {...} block."""
+    if not text or not text.strip():
+        raise ValueError("empty LLM response")
+    text = text.strip()
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        pass
+    if "```" in text:
+        for chunk in text.split("```"):
+            c = chunk.strip()
+            if c.startswith("json"):
+                c = c[4:].strip()
+            if c.startswith("{"):
+                try:
+                    return json.loads(c)
+                except json.JSONDecodeError:
+                    pass
+    depth = 0
+    start = None
+    for i, ch in enumerate(text):
+        if ch == "{":
+            if depth == 0:
+                start = i
+            depth += 1
+        elif ch == "}" and depth > 0:
+            depth -= 1
+            if depth == 0:
+                try:
+                    return json.loads(text[start:i + 1])
+                except json.JSONDecodeError:
+                    start = None
+    raise ValueError(f"no JSON object found in LLM response: {text[:120]!r}")
+
 class OpenAILLM(LLM):
     def __init__(self, model: str = "gpt-4o"):
         from openai import OpenAI
@@ -38,7 +78,7 @@ class OpenAILLM(LLM):
                     },
                 )
                 text = response.choices[0].message.content
-                return json.loads(text)
+                return _extract_json(text)
             except Exception as e:
                 last_exc = e
                 msg = str(e)
