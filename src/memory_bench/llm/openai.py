@@ -77,7 +77,10 @@ class OpenAILLM(LLM):
                         "json_schema": {"name": "response", "schema": schema_json, "strict": True},
                     },
                 )
-                text = response.choices[0].message.content
+                # OpenRouter pode devolver choices=None em erro upstream
+                # transitório; tratar como resposta vazia em vez de crashar.
+                text = (response.choices[0].message.content
+                        if getattr(response, "choices", None) else None)
                 try:
                     data = _extract_json(text)
                 except Exception:
