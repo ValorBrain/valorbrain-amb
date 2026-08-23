@@ -78,7 +78,34 @@ class OpenAILLM(LLM):
                     },
                 )
                 text = response.choices[0].message.content
-                return _extract_json(text)
+                data = _extract_json(text)
+                required = [k for k in (schema.required or []) if k not in data]
+                if required:
+                    # Modelo ignorou o schema (típico de reasoning models via
+                    # OpenRouter): uma tentativa corretiva explicitando as chaves.
+                    fix_prompt = (
+                        prompt
+                        + "\n\nSua resposta anterior não seguiu o formato pedido "
+                        f"(faltaram as chaves: {', '.join(required)}). "
+                        + "Responda APENAS com um único objeto JSON contendo "
+                        + "EXATAMENTE estas chaves: "
+                        + ", ".join(required) + "."
+                    )
+                    response2 = self._client.chat.completions.create(
+                        model=self._model,
+                        messages=[{"role": "user", "content": fix_prompt}],
+                        response_format={
+                            "type": "json_schema",
+                            "json_schema": {"name": "response", "schema": schema_json, "strict": True},
+                        },
+                    )
+                    try:
+                        fixed = _extract_json(response2.choices[0].message.content)
+                        if all(k in fixed for k in schema.required or []):
+                            return fixed
+                    except Exception:
+                        pass
+                return data
             except Exception as e:
                 last_exc = e
                 msg = str(e)
