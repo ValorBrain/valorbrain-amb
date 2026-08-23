@@ -71,8 +71,14 @@ class RAGMode(ResponseMode):
         else:
             prompt = _DEFAULT_OPEN_PROMPT.format(context=context, query=query)
         data = self._llm.generate(prompt, _OPEN_SCHEMA)
+        # Structured-output LLMs sometimes return the answer as a JSON number
+        # ("42" -> 42); AnswerResult.answer must be str or downstream
+        # .strip() crashes the whole run (observed 2026-08-16, 267/400 in).
+        answer = data.get("answer", "")
+        if not isinstance(answer, str):
+            answer = str(answer)
         return AnswerResult(
-            answer=data.get("answer", ""),
+            answer=answer,
             reasoning=data.get("reasoning", ""),
             context=context,
             retrieve_time_ms=round(retrieve_ms, 1),

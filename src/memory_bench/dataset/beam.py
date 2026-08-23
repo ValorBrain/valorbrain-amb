@@ -805,16 +805,56 @@ Return JSON: {{"score": <0.0 or 0.5 or 1.0>, "reason": "<one concise sentence>"}
             logger.warning("[%s] No rubric found, falling back to 0", result.query_id)
             return 0.0
 
-        scores = []
-        for item in rubric:
-            s = self._rubric_item_score(result.query, result.answer, item, llm)
-            scores.append(s)
-            logger.info("[%s] rubric item score=%.1f for: %s", result.query_id, s, item[:80])
-
+        # Batch all rubric items into a single judge call (4× fewer API calls)
+        try:
+            scores = self._rubric_batch_score(result.query, result.answer, rubric, llm)
+        except Exception:
+            # Fallback: per-item scoring
+            scores = []
+            for item in rubric:
+                s = self._rubric_item_score(result.query, result.answer, item, llm)
+                scores.append(s)
         avg = sum(scores) / len(scores) if scores else 0.0
         logger.info("[%s] %s avg_score=%.3f (%d items)", result.query_id, cat, avg, len(scores))
         return avg
 
+    @staticmethod
+    def _rubric_batch_score(query: str, answer: str, rubric: list[str], llm: LLM) -> list[float]:
+        """Score all rubric items in a single judge call. 4× fewer API calls."""
+        items_str = "\n".join(f"{i+1}. {r}" for i, r in enumerate(rubric))
+        prompt = f"""Evaluate whether the following LLM response demonstrates compliance with EACH rubric criterion.
+
+QUESTION:
+{query}
+
+LLM RESPONSE:
+{answer}
+
+RUBRIC CRITERIA:
+{items_str}
+
+SCORING GUIDELINES per criterion:
+- 1.0: Required element present, accurate, complete.
+- 0.5: Partially present, minor inaccuracies, or incomplete.
+- 0.0: Missing, incorrect, or off-topic.
+Semantic tolerance: paraphrases/synonyms OK. Numeric equivalence OK.
+
+Return JSON: {{"scores": [{{"score": 1.0, "reason": "..."}}, ...]}}
+One score object per criterion, in order."""
+        schema = Schema(
+            properties={"scores": {"type": "array"}},
+            required=["scores"],
+        )
+        result = llm.generate(prompt, schema)
+        raw_scores = result.get("scores", [])
+        out = []
+        for rs in raw_scores:
+            v = float(rs.get("score", 0))
+            out.append(1.0 if v >= 0.75 else (0.5 if v >= 0.25 else 0.0))
+        # Pad if model returned fewer scores than rubric items
+        while len(out) < len(rubric):
+            out.append(0.0)
+        return out[:len(rubric)]
     def dataset_stats(self, console: Console, **_) -> None:
         table = Table(title="BEAM dataset stats")
         table.add_column("Split", style="bold")

@@ -78,7 +78,14 @@ class OpenAILLM(LLM):
                     },
                 )
                 text = response.choices[0].message.content
-                data = _extract_json(text)
+                try:
+                    data = _extract_json(text)
+                except Exception:
+                    data = None
+                if data is None:
+                    # Prosa sem JSON nenhum: usa o texto cru como answer em vez
+                    # de derrubar o eval inteiro; o juiz avalia o conteúdo.
+                    return {"answer": (text or "").strip()[:8000]}
                 required = [k for k in (schema.required or []) if k not in data]
                 if required:
                     # Modelo ignorou o schema (típico de reasoning models via
@@ -105,6 +112,8 @@ class OpenAILLM(LLM):
                             return fixed
                     except Exception:
                         pass
+                    # nem o retry voltou JSON utilizável
+                    return {"answer": (text or "").strip()[:8000]}
                 return data
             except Exception as e:
                 last_exc = e
