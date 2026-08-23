@@ -8,7 +8,6 @@ _MAX_RETRIES = 6
 _RETRY_BASE_DELAY = 5
 
 
-
 def _extract_json(text: str | None) -> dict:
     """Parse a JSON object out of an LLM reply.
 
@@ -48,11 +47,13 @@ def _extract_json(text: str | None) -> dict:
                     start = None
     raise ValueError(f"no JSON object found in LLM response: {text[:120]!r}")
 
+
 class OpenAILLM(LLM):
     def __init__(self, model: str = "gpt-4o"):
         from openai import OpenAI
         self._client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         self._model = model
+        self._reasoning_effort = os.environ.get("OPENROUTER_REASONING_EFFORT", "high")
 
     @property
     def model_id(self) -> str:
@@ -76,38 +77,33 @@ class OpenAILLM(LLM):
                         "type": "json_schema",
                         "json_schema": {"name": "response", "schema": schema_json, "strict": True},
                     },
+                    extra_body={"reasoning": {"effort": os.environ.get("OPENROUTER_REASONING_EFFORT", "high")}},
                 )
-                # OpenRouter pode devolver choices=None em erro upstream
-                # transitório; tratar como resposta vazia em vez de crashar.
-                text = (response.choices[0].message.content
-                        if getattr(response, "choices", None) else None)
+                # OpenRouter pode devolver choices=None em erro upstream transitório.
+                text = None
+                if getattr(response, "choices", None):
+                    text = response.choices[0].message.content
+                if not text or not text.strip():
+                    raise ValueError("empty response body")
                 try:
                     data = _extract_json(text)
                 except Exception:
                     data = None
                 if data is None:
-                    # Prosa sem JSON nenhum: usa o texto cru como answer em vez
-                    # de derrubar o eval inteiro; o juiz avalia o conteúdo.
-                    return {"answer": (text or "").strip()[:8000]}
+                    return {"answer": text.strip()[:8000]}
                 required = [k for k in (schema.required or []) if k not in data]
                 if required:
-                    # Modelo ignorou o schema (típico de reasoning models via
-                    # OpenRouter): uma tentativa corretiva explicitando as chaves.
                     fix_prompt = (
                         prompt
-                        + "\n\nSua resposta anterior não seguiu o formato pedido "
-                        f"(faltaram as chaves: {', '.join(required)}). "
-                        + "Responda APENAS com um único objeto JSON contendo "
-                        + "EXATAMENTE estas chaves: "
+                        + "\n\nYour previous reply did not follow the required format "
+                        f"(missing keys: {', '.join(required)}). "
+                        + "Reply ONLY with a single JSON object containing EXACTLY these keys: "
                         + ", ".join(required) + "."
                     )
                     response2 = self._client.chat.completions.create(
                         model=self._model,
                         messages=[{"role": "user", "content": fix_prompt}],
-                        response_format={
-                            "type": "json_schema",
-                            "json_schema": {"name": "response", "schema": schema_json, "strict": True},
-                        },
+                        extra_body={"reasoning": {"effort": os.environ.get("OPENROUTER_REASONING_EFFORT", "high")}},
                     )
                     try:
                         fixed = _extract_json(response2.choices[0].message.content)
@@ -115,8 +111,7 @@ class OpenAILLM(LLM):
                             return fixed
                     except Exception:
                         pass
-                    # nem o retry voltou JSON utilizável
-                    return {"answer": (text or "").strip()[:8000]}
+                    return {"answer": text.strip()[:8000]}
                 return data
             except Exception as e:
                 last_exc = e
