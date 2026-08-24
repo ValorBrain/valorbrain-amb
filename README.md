@@ -33,6 +33,8 @@ Two behaviors worth knowing:
 
 GLM-5.2 is a reasoning model (Z.ai coding plan): the answer appears in `reasoning_content` when `content` is empty. Since Z.ai has no `response_format` support, JSON is extracted prompt-side. This is the reader that scored **70.9% on BEAM-100K (312/400)** — 5 of 10 category wins vs Hindsight.
 
+> Newer headline: **80.8% (323/400)** with `stealth/ox-alpha` via OpenRouter at `reasoning.effort=max` — see the [Results](#results) section and the [writeup](https://valorbrain.valor.digital/research/beam-100k-sota-ox-alpha-reasoning-effort). The ox-alpha reader runs through the Gateway LLM provider below.
+
 ### Gateway LLM
 
 Plain-HTTP OpenAI-compatible client with no `response_format` dependency (built to talk to an `opencode-go` gateway serving e.g. `deepseek-v4-flash`). Prompt-based JSON extraction, exponential-backoff retries (4 attempts). The base for both the GLM provider (subclass) and any generic OpenAI-compatible endpoint.
@@ -174,7 +176,7 @@ Upstream AMB hard-fails without a Gemini key because the judge and reader defaul
 
 ## Results
 
-Headline: **70.9% on BEAM-100K** (312/400) with GLM-5.2 as reader — 5 of 10 category wins vs Hindsight. The full run lives at `outputs/beam/valorbrain-gemini-judge-full/rag/100k.json`.
+Headline: **80.8% on BEAM-100K** (323/400) with stealth/ox-alpha as reader at `reasoning.effort=max` — first run above 80% on this harness. Progression: 70.9% (GLM-5.2) → 78.2% (ox-alpha, default effort) → 80.8% (ox-alpha, max effort). The full run lives at `results/beam-100k-ox-alpha-effortmax-400q.json`. Full writeup: https://valorbrain.valor.digital/research/beam-100k-sota-ox-alpha-reasoning-effort
 
 ---
 
