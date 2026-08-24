@@ -91,8 +91,10 @@ class ValorBrainMemoryProvider(MemoryProvider):
         collections_seen: set[str] = set()
         for doc in documents:
             raw = (doc.user_id or "amb-default").lower()
-            # Check if production-chunked collection already exists (beam-100k-N)
-            existing = f"beam-100k-{raw}" if raw.isdigit() else raw
+            # Check if production-chunked collection already exists (beam-100k-N).
+            # Prefix is configurable so other splits (e.g. beam-10m) don't collide.
+            prefix = os.environ.get("VALORBRAIN_COLLECTION_PREFIX", "beam-100k")
+            existing = f"{prefix}-{raw}" if raw.isdigit() else raw
             try:
                 stats = self._get_stats_collection(existing, timeout=15)
                 if stats.get("collectionDocuments", 0) > 0:
@@ -118,7 +120,8 @@ class ValorBrainMemoryProvider(MemoryProvider):
                         break
                     pos = end - WINDOW_OVERLAP
 
-            for w_path, w_content in windows:
+            def _post_window(args: tuple[str, str]) -> None:
+                w_path, w_content = args
                 body = {
                     "content": w_content,
                     "collection": collection,
@@ -131,6 +134,12 @@ class ValorBrainMemoryProvider(MemoryProvider):
                     self._post("/documents", body, timeout=300)
                 except Exception as e:
                     logger.warning("ValorBrain ingest failed for %s/%s: %s", collection, w_path, e)
+
+            # Parallel ingest: ~240ms/POST sequential is hours at 10m scale;
+            # 8 workers keep the embed service and DB both busy.
+            from concurrent.futures import ThreadPoolExecutor
+            with ThreadPoolExecutor(max_workers=8) as pool:
+                list(pool.map(_post_window, windows))
 
         # Wait for hybrid index on each collection that received documents.
         for collection in collections_seen:
@@ -192,10 +201,11 @@ class ValorBrainMemoryProvider(MemoryProvider):
         user_id: str | None = None,
         query_timestamp: str | None = None,
     ) -> tuple[list[Document], dict | None]:
-        # Map AMB user_id (e.g. "1") to our production chunked collections
-        # (e.g. "beam-100k-1") which have proper 6-turn windows (38 docs/conv).
+        # Map AMB user_id (e.g. "1") to our chunked collections (prefix-configurable,
+        # default beam-100k-N — production 6-turn windows, 38 docs/conv).
         raw = user_id or "amb-default"
-        collection = f"beam-100k-{raw}" if raw.isdigit() else raw
+        prefix = os.environ.get("VALORBRAIN_COLLECTION_PREFIX", "beam-100k")
+        collection = f"{prefix}-{raw}" if raw.isdigit() else raw
 
         # /memory/prepare delivers the full pipeline (funnel + multitrecho + rerank).
         # delivered_documents are snippeted server-side (6k). This is the production
