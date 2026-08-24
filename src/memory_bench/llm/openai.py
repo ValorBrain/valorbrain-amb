@@ -84,7 +84,12 @@ class OpenAILLM(LLM):
                 if getattr(response, "choices", None):
                     text = response.choices[0].message.content
                 if not text or not text.strip():
-                    raise ValueError("empty response body")
+                    # Resposta vazia (rate limit upstream): retry em vez de crash.
+                    if attempt < _MAX_RETRIES - 1:
+                        time.sleep(delay)
+                        delay *= 2
+                        continue
+                    return {"answer": ""}
                 try:
                     data = _extract_json(text)
                 except Exception:
