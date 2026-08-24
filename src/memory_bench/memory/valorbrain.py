@@ -127,6 +127,9 @@ class ValorBrainMemoryProvider(MemoryProvider):
                     "collection": collection,
                     "path": w_path,
                     "content_type": "conversation",
+                    # BEAM 10m docs are giant config/log dumps that trip the
+                    # engine's operational-noise heuristic (JSON lines ≤10 chars).
+                    "skip_noise_filter": True,
                 }
                 if doc.timestamp:
                     body["event_at"] = doc.timestamp
