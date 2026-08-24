@@ -176,7 +176,9 @@ Upstream AMB hard-fails without a Gemini key because the judge and reader defaul
 
 ## Results
 
-Headline: **80.8% on BEAM-100K** (323/400) with stealth/ox-alpha as reader at `reasoning.effort=max` — first run above 80% on this harness. Progression: 70.9% (GLM-5.2) → 78.2% (ox-alpha, default effort) → 80.8% (ox-alpha, max effort). The full run lives at `results/beam-100k-ox-alpha-effortmax-400q.json`. Full writeup: https://valorbrain.valor.digital/research/beam-100k-sota-ox-alpha-reasoning-effort
+Headline: **80.8% on BEAM-100K** (323/400)
+
+**BEAM-10M**: **51.2%** runner accuracy (112/200 binary) on the 10M-token split — 10 giant documents, ~110M tokens. +10.6pp over Hindsight RAG (40.6%). Run: `results/beam-10m-ox-alpha-effortmax-200q.json`. with stealth/ox-alpha as reader at `reasoning.effort=max` — first run above 80% on this harness. Progression: 70.9% (GLM-5.2) → 78.2% (ox-alpha, default effort) → 80.8% (ox-alpha, max effort). The full run lives at `results/beam-100k-ox-alpha-effortmax-400q.json`. Full writeup: https://valorbrain.valor.digital/research/beam-100k-sota-ox-alpha-reasoning-effort
 
 ---
 
