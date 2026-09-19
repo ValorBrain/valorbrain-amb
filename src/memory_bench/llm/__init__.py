@@ -32,7 +32,12 @@ def get_answer_llm() -> LLM:
     cls = REGISTRY.get(provider)
     if cls is None:
         raise ValueError(f"Unknown OMB_ANSWER_LLM: '{provider}'. Available: {list(REGISTRY)}")
-    return cls(model) if model else cls()
+    kwargs = {}
+    if provider == "gateway":
+        eff = os.environ.get("OMB_ANSWER_REASONING_EFFORT")
+        if eff:
+            kwargs["reasoning_effort"] = eff
+    return cls(model, **kwargs) if model else cls(**kwargs)
 
 
 def get_judge_llm() -> LLM:
@@ -43,4 +48,9 @@ def get_judge_llm() -> LLM:
     cls = REGISTRY.get(provider)
     if cls is None:
         raise ValueError(f"Unknown OMB_JUDGE_LLM: '{provider}'. Available: {list(REGISTRY)}")
-    return cls(model) if model else cls()
+    kwargs = {}
+    if provider == "gateway":
+        eff = os.environ.get("OMB_JUDGE_REASONING_EFFORT")
+        if eff:
+            kwargs["reasoning_effort"] = eff
+    return cls(model, **kwargs) if model else cls(**kwargs)

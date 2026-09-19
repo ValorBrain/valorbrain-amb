@@ -20,10 +20,14 @@ _RETRY_DELAY = 5
 class GatewayLLM(LLM):
     """OpenAI-compatible LLM via plain HTTP, no response_format dependency."""
 
-    def __init__(self, model: str | None = None):
+    def __init__(self, model: str | None = None, reasoning_effort: str | None = None):
         self._base = os.environ.get("OPENAI_BASE_URL", "http://localhost:8201/v1").rstrip("/")
         self._key = os.environ.get("OPENAI_API_KEY", "")
         self._model = model or os.environ.get("OMB_GATEWAY_MODEL", "deepseek-v4-flash")
+        # Portado do provider openai (f283496): o research de 75,5% comprou
+        # +3,2pp com reasoning effort max — suporte que nunca chegou ao gateway.
+        # Por papel: leitor lê OMB_ANSWER_REASONING_EFFORT, juiz OMB_JUDGE_REASONING_EFFORT.
+        self._reasoning_effort = reasoning_effort or os.environ.get("OMB_GATEWAY_REASONING_EFFORT")
 
     @property
     def model_id(self) -> str:
@@ -57,12 +61,15 @@ class GatewayLLM(LLM):
         # and the empty content silently became an empty answer (same failure
         # class the GLM judge had before its fix).
         max_tokens = int(os.environ.get("OMB_GATEWAY_MAX_TOKENS", "16384"))
-        body = json.dumps({
+        payload = {
             "model": self._model,
             "messages": [{"role": "user", "content": prompt}],
             "max_tokens": max_tokens,
             "temperature": 0,
-        }).encode("utf-8")
+        }
+        if self._reasoning_effort:
+            payload["reasoning_effort"] = self._reasoning_effort
+        body = json.dumps(payload).encode("utf-8")
 
         req = urllib.request.Request(
             url,
