@@ -8,7 +8,15 @@ only expands the query; it never ranks. Personalized PageRank exists behind a fl
 off in production.
 
 This provider talks to a running ValorBrain engine instance via its REST API.
-Set VALORBRAIN_URL (default https://valorbrain-api.valor.digital) and VALORBRAIN_TOKEN.
+VALORBRAIN_URL, VALORBRAIN_TOKEN and VALORBRAIN_BENCHMARK_TENANT_ID are all
+REQUIRED — the provider refuses to start without them (see _guard_env).
+
+Why: on 2026-09-18/19 six benchmark runs silently fell through the old defaults
+(VALORBRAIN_URL -> https://valorbrain-api.valor.digital = PRODUCTION, tenant ->
+whatever the token resolves to = the company dogfood tenant), ingesting a fresh
+BEAM corpus into the real tenant and poisoning every score with dogfood
+memories. Benchmarks run on a declared engine + dedicated bench tenant, never
+anywhere by accident. See docs/research/AMB-CANONICO.md in the engine repo.
 
 Each AMB isolation unit (e.g. BEAM conversation) becomes a ValorBrain collection.
 """
@@ -25,6 +33,21 @@ from .base import MemoryProvider
 
 logger = logging.getLogger(__name__)
 
+# Real tenants that must NEVER receive benchmark data (Gus rule, 2026-09-19:
+# "bench deve ser limpo e não no nosso tenant"). Add more if real tenants appear.
+FORBIDDEN_TENANTS: dict[str, str] = {
+    "3ceeb048-754c-4910-a798-112ae867e9a4": "valor-digital (company dogfood/production tenant)",
+}
+
+
+def _refuse(reason: str) -> "None":
+    raise SystemExit(
+        f"\nREFUSING TO RUN: {reason}\n"
+        "A benchmark must declare its engine and dedicated bench tenant explicitly.\n"
+        "Canonical setup: see docs/research/AMB-CANONICO.md in the engine repo\n"
+        "(staging :7439 + bench tenant 00000000-0000-0000-0000-000000000001).\n"
+    )
+
 
 class ValorBrainMemoryProvider(MemoryProvider):
     name = "valorbrain"
@@ -37,9 +60,29 @@ class ValorBrainMemoryProvider(MemoryProvider):
     concurrency = 4
 
     def __init__(self):
-        self._base = os.environ.get("VALORBRAIN_URL", "https://valorbrain-api.valor.digital").rstrip("/")
-        self._token = os.environ.get("VALORBRAIN_TOKEN", "")
-        self._tenant = os.environ.get("VALORBRAIN_BENCHMARK_TENANT_ID", "")
+        url = os.environ.get("VALORBRAIN_URL", "").strip()
+        if not url:
+            _refuse(
+                "VALORBRAIN_URL is not set. The old silent default was the "
+                "PRODUCTION engine (valorbrain-api.valor.digital)."
+            )
+        self._base = url.rstrip("/")
+        self._token = os.environ.get("VALORBRAIN_TOKEN", "").strip()
+        if not self._token:
+            _refuse("VALORBRAIN_TOKEN is not set.")
+        self._tenant = os.environ.get("VALORBRAIN_BENCHMARK_TENANT_ID", "").strip()
+        if not self._tenant:
+            _refuse(
+                "VALORBRAIN_BENCHMARK_TENANT_ID is not set. Without it the engine "
+                "resolves the tenant from the token — that is how the 2026-09-18/19 "
+                "runs landed on the company dogfood tenant."
+            )
+        forbidden = FORBIDDEN_TENANTS.get(self._tenant.lower())
+        if forbidden:
+            _refuse(
+                f"VALORBRAIN_BENCHMARK_TENANT_ID is {forbidden} — benchmark data "
+                "must never be written to a real tenant."
+            )
         self._ingested_collections: set[str] = set()
 
     # ── HTTP helper ──────────────────────────────────────────────────────
