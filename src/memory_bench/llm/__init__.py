@@ -37,6 +37,9 @@ def get_answer_llm() -> LLM:
         eff = os.environ.get("OMB_ANSWER_REASONING_EFFORT")
         if eff:
             kwargs["reasoning_effort"] = eff
+        for src, dst in [("OMB_ANSWER_BASE_URL", "base_url"), ("OMB_ANSWER_API_KEY", "api_key")]:
+            if os.environ.get(src):
+                kwargs[dst] = os.environ[src]
     return cls(model, **kwargs) if model else cls(**kwargs)
 
 
@@ -53,4 +56,7 @@ def get_judge_llm() -> LLM:
         eff = os.environ.get("OMB_JUDGE_REASONING_EFFORT")
         if eff:
             kwargs["reasoning_effort"] = eff
+        for src, dst in [("OMB_JUDGE_BASE_URL", "base_url"), ("OMB_JUDGE_API_KEY", "api_key")]:
+            if os.environ.get(src):
+                kwargs[dst] = os.environ[src]
     return cls(model, **kwargs) if model else cls(**kwargs)

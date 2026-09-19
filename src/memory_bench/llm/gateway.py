@@ -20,9 +20,13 @@ _RETRY_DELAY = 5
 class GatewayLLM(LLM):
     """OpenAI-compatible LLM via plain HTTP, no response_format dependency."""
 
-    def __init__(self, model: str | None = None, reasoning_effort: str | None = None):
-        self._base = os.environ.get("OPENAI_BASE_URL", "http://localhost:8201/v1").rstrip("/")
-        self._key = os.environ.get("OPENAI_API_KEY", "")
+    def __init__(self, model: str | None = None, reasoning_effort: str | None = None,
+                 base_url: str | None = None, api_key: str | None = None):
+        # Base/key por papel: o leitor glm roda no coding plan da Z.ai
+        # (assinatura), o juiz deepseek no gateway OpenCode local — quem paga
+        # por token é só quem não tem assinatura.
+        self._base = (base_url or os.environ.get("OPENAI_BASE_URL", "http://localhost:8201/v1")).rstrip("/")
+        self._key = api_key or os.environ.get("OPENAI_API_KEY", "")
         self._model = model or os.environ.get("OMB_GATEWAY_MODEL", "deepseek-v4-flash")
         # Portado do provider openai (f283496): o research de 75,5% comprou
         # +3,2pp com reasoning effort max — suporte que nunca chegou ao gateway.
