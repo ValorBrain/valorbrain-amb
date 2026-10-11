@@ -271,6 +271,10 @@ These are Hindsight's runs as published in `results-manifest.json` (the AMB scor
 
 ---
 
+## Continuity benchmark
+
+[`continuity/`](continuity/README.md) is our own open benchmark for the part of agent memory that plain vector RAG doesn't do. It covers four scenarios. A decision that was replaced (`supersedes`). A rule that has expired (`valid_until`). A handoff between sessions that was already consumed. A private note that another person must not see. ValorBrain and a plain vector RAG baseline index the same texts, and scoring is deterministic exact match with no LLM judge. The method, data generator, harness, raw outputs and reproduction commands are all in that directory. Results tables with N, date, engine version and reader are in [`continuity/results/`](continuity/results/).
+
 ## Reproducing
 
 ValorBrain is a hosted memory API. To reproduce our results:

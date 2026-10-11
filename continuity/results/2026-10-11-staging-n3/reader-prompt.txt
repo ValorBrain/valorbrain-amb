@@ -1,0 +1,15 @@
+You are an AI agent starting a work session. Today is {today}. You are acting as {persona}.
+Your memory system returned the context below for the question. Use only this context.
+
+Rules:
+- Answer with the single code (shaped like WORD-123) that answers the question as of today.
+- If the context offers several candidate codes, choose the one that is current, still in force today and still pending for you.
+- If the context does not establish such an answer, answer NONE.
+
+Question: {question}
+
+<context>
+{context}
+</context>
+
+Respond with only a JSON object: {{"value": "<CODE or NONE>", "reason": "<one short sentence>"}}

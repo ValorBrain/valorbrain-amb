@@ -1,0 +1,22 @@
+[project]
+name = "continuity-bench"
+version = "1.0.0"
+description = "Continuity benchmark for agent memory: handoff, supersession, expired rules, permission inheritance"
+requires-python = ">=3.11"
+dependencies = [
+    "fastembed==0.7.3",
+    "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[project.scripts]
+continuity-bench = "continuity_bench.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["continuity_bench"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

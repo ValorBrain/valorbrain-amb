@@ -1,0 +1,1306 @@
+{
+ "version": "continuity-v1",
+ "seed": 20261011,
+ "per_cell": 3,
+ "steps": [
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "umbra/note.md",
+   "text": "Umbra weekly sync moved to Wednesdays; notes go in the team channel.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "vertex/note.md",
+   "text": "Vertex stakeholders asked for a one-page summary before the quarterly review.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "meridian/note.md",
+   "text": "The Meridian dashboard now shows p95 latency next to error rate.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "juniper/note.md",
+   "text": "Juniper weekly sync moved to Wednesdays; notes go in the team channel.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "zephyr/note.md",
+   "text": "Zephyr stakeholders asked for a one-page summary before the quarterly review.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "onyx/note.md",
+   "text": "The Onyx dashboard now shows p95 latency next to error rate.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "redwood/note.md",
+   "text": "Redwood weekly sync moved to Wednesdays; notes go in the team channel.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "fjord/note.md",
+   "text": "Fjord stakeholders asked for a one-page summary before the quarterly review.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "aurora/note.md",
+   "text": "The Aurora dashboard now shows p95 latency next to error rate.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "cobalt/note.md",
+   "text": "Cobalt weekly sync moved to Wednesdays; notes go in the team channel.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "sierra/note.md",
+   "text": "Sierra stakeholders asked for a one-page summary before the quarterly review.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "delta/note.md",
+   "text": "The Delta dashboard now shows p95 latency next to error rate.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "nimbus/note.md",
+   "text": "Nimbus weekly sync moved to Wednesdays; notes go in the team channel.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "tundra/note.md",
+   "text": "Tundra stakeholders asked for a one-page summary before the quarterly review.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "halcyon/note.md",
+   "text": "The Halcyon dashboard now shows p95 latency next to error rate.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "ember/note.md",
+   "text": "Ember weekly sync moved to Wednesdays; notes go in the team channel.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "quasar/note.md",
+   "text": "Quasar stakeholders asked for a one-page summary before the quarterly review.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "garnet/note.md",
+   "text": "The Garnet dashboard now shows p95 latency next to error rate.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "willow/note.md",
+   "text": "Willow weekly sync moved to Wednesdays; notes go in the team channel.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "atlas/note.md",
+   "text": "Atlas stakeholders asked for a one-page summary before the quarterly review.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "xenon/note.md",
+   "text": "The Xenon dashboard now shows p95 latency next to error rate.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "basalt/note.md",
+   "text": "Basalt weekly sync moved to Wednesdays; notes go in the team channel.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "cascade/note.md",
+   "text": "Cascade stakeholders asked for a one-page summary before the quarterly review.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "yarrow/note.md",
+   "text": "The Yarrow dashboard now shows p95 latency next to error rate.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "borealis/note.md",
+   "text": "Borealis weekly sync moved to Wednesdays; notes go in the team channel.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "indigo/note.md",
+   "text": "Indigo stakeholders asked for a one-page summary before the quarterly review.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "kepler/note.md",
+   "text": "The Kepler dashboard now shows p95 latency next to error rate.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "dune/note.md",
+   "text": "Dune weekly sync moved to Wednesdays; notes go in the team channel.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "lumen/note.md",
+   "text": "Lumen stakeholders asked for a one-page summary before the quarterly review.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-notes",
+   "path": "pioneer/note.md",
+   "text": "The Pioneer dashboard now shows p95 latency next to error rate.",
+   "content_type": "note",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "umbra/data-retention-policy-v1.md",
+   "text": "Decision: the Umbra data retention policy uses policy code SISKIN-527.",
+   "content_type": "decision",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "umbra/data-retention-policy-v2.md",
+   "text": "Decision: the Umbra data retention policy uses policy code DUNLIN-890.",
+   "content_type": "decision",
+   "supersedes": "umbra/data-retention-policy-v1.md"
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "vertex/log-shipping-destination-v1.md",
+   "text": "Initial decision ({date:-30}): the Vertex log shipping destination uses destination code IBIS-411.",
+   "content_type": "decision",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "vertex/log-shipping-destination-v2.md",
+   "text": "Updated decision, replaces the previous one ({date:-20}): the Vertex log shipping destination uses destination code PIPIT-969.",
+   "content_type": "decision",
+   "supersedes": "vertex/log-shipping-destination-v1.md"
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "vertex/single-primary-database-failover-plan.md",
+   "text": "Decision: the Vertex primary database failover plan uses plan code DUNLIN-621.",
+   "content_type": "decision",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "meridian/on-call-escalation-route-v1.md",
+   "text": "Decision: the Meridian on-call escalation route uses route code LARK-804.",
+   "content_type": "decision",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "meridian/on-call-escalation-route-v2.md",
+   "text": "Decision: the Meridian on-call escalation route uses route code TERN-805.",
+   "content_type": "decision",
+   "supersedes": "meridian/on-call-escalation-route-v1.md"
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "juniper/staging-deploy-approver-group-v1.md",
+   "text": "Initial decision ({date:-30}): the Juniper staging deploy approver group uses group code KITE-170.",
+   "content_type": "decision",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "juniper/staging-deploy-approver-group-v2.md",
+   "text": "Updated decision, replaces the previous one ({date:-20}): the Juniper staging deploy approver group uses group code MAGPIE-450.",
+   "content_type": "decision",
+   "supersedes": "juniper/staging-deploy-approver-group-v1.md"
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "juniper/single-customer-refund-approval-flow.md",
+   "text": "Decision: the Juniper customer refund approval flow uses flow code CRANE-473.",
+   "content_type": "decision",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "zephyr/release-branch-naming-scheme-v1.md",
+   "text": "Decision: the Zephyr release branch naming scheme uses scheme code VIREO-427.",
+   "content_type": "decision",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "zephyr/release-branch-naming-scheme-v2.md",
+   "text": "Decision: the Zephyr release branch naming scheme uses scheme code LINNET-995.",
+   "content_type": "decision",
+   "supersedes": "zephyr/release-branch-naming-scheme-v1.md"
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "zephyr/release-branch-naming-scheme-v3.md",
+   "text": "Decision: the Zephyr release branch naming scheme uses scheme code PIPIT-927.",
+   "content_type": "decision",
+   "supersedes": "zephyr/release-branch-naming-scheme-v2.md"
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "onyx/incident-severity-matrix-v1.md",
+   "text": "Initial decision ({date:-30}): the Onyx incident severity matrix uses matrix code PIPIT-148.",
+   "content_type": "decision",
+   "supersedes": null
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "onyx/incident-severity-matrix-v2.md",
+   "text": "Updated decision, replaces the previous one ({date:-20}): the Onyx incident severity matrix uses matrix code EGRET-653.",
+   "content_type": "decision",
+   "supersedes": "onyx/incident-severity-matrix-v1.md"
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "onyx/incident-severity-matrix-v3.md",
+   "text": "Updated decision, replaces the previous one ({date:-10}): the Onyx incident severity matrix uses matrix code PIPIT-131.",
+   "content_type": "decision",
+   "supersedes": "onyx/incident-severity-matrix-v2.md"
+  },
+  {
+   "op": "doc",
+   "tenant": "agent",
+   "collection": "cb-decisions",
+   "path": "onyx/single-log-shipping-destination.md",
+   "text": "Decision: the Onyx log shipping destination uses destination code AUKLET-613.",
+   "content_type": "decision",
+   "supersedes": null
+  },
+  {
+   "op": "fact",
+   "tenant": "agent",
+   "key": "rule:fjord-deploy-freeze",
+   "text": "Fjord deploy freeze: only change ticket RAVEN-512 may ship",
+   "as_of_offset": -40,
+   "valid_until_offset": -10
+  },
+  {
+   "op": "fact",
+   "tenant": "agent",
+   "key": "rule:aurora-vendor-purchase-hold",
+   "text": "Aurora vendor purchase hold: only purchase order GANNET-461 may be approved",
+   "as_of_offset": -40,
+   "valid_until_offset": 90
+  },
+  {
+   "op": "fact",
+   "tenant": "agent",
+   "key": "rule:cobalt-schema-change-embargo",
+   "text": "Cobalt schema change embargo: only migration AVOCET-390 may run (in force from {date:-40} until {date:-10})",
+   "as_of_offset": -40,
+   "valid_until_offset": -10
+  },
+  {
+   "op": "fact",
+   "tenant": "agent",
+   "key": "rule:sierra-travel-restriction",
+   "text": "Sierra travel restriction: only trip request SISKIN-673 may be booked (in force from {date:-40} until {date:90})",
+   "as_of_offset": -40,
+   "valid_until_offset": 90
+  },
+  {
+   "op": "fact",
+   "tenant": "agent",
+   "key": "rule:delta-hiring-pause",
+   "text": "Delta hiring pause: only requisition BITTERN-920 may be filled",
+   "as_of_offset": -40,
+   "valid_until_offset": -10
+  },
+  {
+   "op": "fact",
+   "tenant": "agent",
+   "key": "rule:nimbus-deploy-freeze",
+   "text": "Nimbus deploy freeze: only change ticket MERLIN-757 may ship",
+   "as_of_offset": -40,
+   "valid_until_offset": 90
+  },
+  {
+   "op": "fact",
+   "tenant": "agent",
+   "key": "rule:tundra-vendor-purchase-hold",
+   "text": "Tundra vendor purchase hold: only purchase order GODWIT-865 may be approved (in force from {date:-40} until {date:-10})",
+   "as_of_offset": -40,
+   "valid_until_offset": -10
+  },
+  {
+   "op": "fact",
+   "tenant": "agent",
+   "key": "rule:halcyon-schema-change-embargo",
+   "text": "Halcyon schema change embargo: only migration EIDER-529 may run (in force from {date:-40} until {date:90})",
+   "as_of_offset": -40,
+   "valid_until_offset": 90
+  },
+  {
+   "op": "fact",
+   "tenant": "agent",
+   "key": "rule:ember-travel-restriction",
+   "text": "Ember travel restriction: only trip request TOWHEE-844 may be booked",
+   "as_of_offset": -40,
+   "valid_until_offset": -10
+  },
+  {
+   "op": "fact",
+   "tenant": "agent",
+   "key": "rule:quasar-hiring-pause",
+   "text": "Quasar hiring pause: only requisition SISKIN-203 may be filled",
+   "as_of_offset": -40,
+   "valid_until_offset": 90
+  },
+  {
+   "op": "fact",
+   "tenant": "agent",
+   "key": "rule:garnet-deploy-freeze",
+   "text": "Garnet deploy freeze: only change ticket WREN-734 may ship (in force from {date:-40} until {date:-10})",
+   "as_of_offset": -40,
+   "valid_until_offset": -10
+  },
+  {
+   "op": "fact",
+   "tenant": "agent",
+   "key": "rule:willow-vendor-purchase-hold",
+   "text": "Willow vendor purchase hold: only purchase order DUNLIN-589 may be approved (in force from {date:-40} until {date:90})",
+   "as_of_offset": -40,
+   "valid_until_offset": 90
+  },
+  {
+   "op": "barrier",
+   "tenant": "agent"
+  },
+  {
+   "op": "ask",
+   "id": "S-implicit-00",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "supersession",
+   "variant": "implicit",
+   "question": "What policy code does the Umbra data retention policy use now? Answer with the code.",
+   "gold": "DUNLIN-890",
+   "forbidden": [
+    "SISKIN-527"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "S-explicit-00",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "supersession",
+   "variant": "explicit",
+   "question": "What destination code does the Vertex log shipping destination use now? Answer with the code.",
+   "gold": "PIPIT-969",
+   "forbidden": [
+    "IBIS-411"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "S-control-00",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "supersession",
+   "variant": "control",
+   "question": "What plan code does the Vertex primary database failover plan use now? Answer with the code.",
+   "gold": "DUNLIN-621",
+   "forbidden": []
+  },
+  {
+   "op": "ask",
+   "id": "S-implicit-01",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "supersession",
+   "variant": "implicit",
+   "question": "What route code does the Meridian on-call escalation route use now? Answer with the code.",
+   "gold": "TERN-805",
+   "forbidden": [
+    "LARK-804"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "S-explicit-01",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "supersession",
+   "variant": "explicit",
+   "question": "What group code does the Juniper staging deploy approver group use now? Answer with the code.",
+   "gold": "MAGPIE-450",
+   "forbidden": [
+    "KITE-170"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "S-control-01",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "supersession",
+   "variant": "control",
+   "question": "What flow code does the Juniper customer refund approval flow use now? Answer with the code.",
+   "gold": "CRANE-473",
+   "forbidden": []
+  },
+  {
+   "op": "ask",
+   "id": "S-implicit-02",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "supersession",
+   "variant": "implicit",
+   "question": "What scheme code does the Zephyr release branch naming scheme use now? Answer with the code.",
+   "gold": "PIPIT-927",
+   "forbidden": [
+    "VIREO-427",
+    "LINNET-995"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "S-explicit-02",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "supersession",
+   "variant": "explicit",
+   "question": "What matrix code does the Onyx incident severity matrix use now? Answer with the code.",
+   "gold": "PIPIT-131",
+   "forbidden": [
+    "PIPIT-148",
+    "EGRET-653"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "S-control-02",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "supersession",
+   "variant": "control",
+   "question": "What destination code does the Onyx log shipping destination use now? Answer with the code.",
+   "gold": "AUKLET-613",
+   "forbidden": []
+  },
+  {
+   "op": "ask",
+   "id": "E-implicit-expired-00",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "expiry",
+   "variant": "implicit-expired",
+   "question": "Is a Fjord deploy freeze in force today? If yes, give the one code it still allows; if no such rule is in force today, answer NONE.",
+   "gold": "NONE",
+   "forbidden": [
+    "RAVEN-512"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "E-implicit-valid-00",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "expiry",
+   "variant": "implicit-valid",
+   "question": "Is a Aurora vendor purchase hold in force today? If yes, give the one code it still allows; if no such rule is in force today, answer NONE.",
+   "gold": "GANNET-461",
+   "forbidden": []
+  },
+  {
+   "op": "ask",
+   "id": "E-explicit-expired-00",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "expiry",
+   "variant": "explicit-expired",
+   "question": "Is a Cobalt schema change embargo in force today? If yes, give the one code it still allows; if no such rule is in force today, answer NONE.",
+   "gold": "NONE",
+   "forbidden": [
+    "AVOCET-390"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "E-explicit-valid-00",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "expiry",
+   "variant": "explicit-valid",
+   "question": "Is a Sierra travel restriction in force today? If yes, give the one code it still allows; if no such rule is in force today, answer NONE.",
+   "gold": "SISKIN-673",
+   "forbidden": []
+  },
+  {
+   "op": "ask",
+   "id": "E-implicit-expired-01",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "expiry",
+   "variant": "implicit-expired",
+   "question": "Is a Delta hiring pause in force today? If yes, give the one code it still allows; if no such rule is in force today, answer NONE.",
+   "gold": "NONE",
+   "forbidden": [
+    "BITTERN-920"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "E-implicit-valid-01",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "expiry",
+   "variant": "implicit-valid",
+   "question": "Is a Nimbus deploy freeze in force today? If yes, give the one code it still allows; if no such rule is in force today, answer NONE.",
+   "gold": "MERLIN-757",
+   "forbidden": []
+  },
+  {
+   "op": "ask",
+   "id": "E-explicit-expired-01",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "expiry",
+   "variant": "explicit-expired",
+   "question": "Is a Tundra vendor purchase hold in force today? If yes, give the one code it still allows; if no such rule is in force today, answer NONE.",
+   "gold": "NONE",
+   "forbidden": [
+    "GODWIT-865"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "E-explicit-valid-01",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "expiry",
+   "variant": "explicit-valid",
+   "question": "Is a Halcyon schema change embargo in force today? If yes, give the one code it still allows; if no such rule is in force today, answer NONE.",
+   "gold": "EIDER-529",
+   "forbidden": []
+  },
+  {
+   "op": "ask",
+   "id": "E-implicit-expired-02",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "expiry",
+   "variant": "implicit-expired",
+   "question": "Is a Ember travel restriction in force today? If yes, give the one code it still allows; if no such rule is in force today, answer NONE.",
+   "gold": "NONE",
+   "forbidden": [
+    "TOWHEE-844"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "E-implicit-valid-02",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "expiry",
+   "variant": "implicit-valid",
+   "question": "Is a Quasar hiring pause in force today? If yes, give the one code it still allows; if no such rule is in force today, answer NONE.",
+   "gold": "SISKIN-203",
+   "forbidden": []
+  },
+  {
+   "op": "ask",
+   "id": "E-explicit-expired-02",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "expiry",
+   "variant": "explicit-expired",
+   "question": "Is a Garnet deploy freeze in force today? If yes, give the one code it still allows; if no such rule is in force today, answer NONE.",
+   "gold": "NONE",
+   "forbidden": [
+    "WREN-734"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "E-explicit-valid-02",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "expiry",
+   "variant": "explicit-valid",
+   "question": "Is a Willow vendor purchase hold in force today? If yes, give the one code it still allows; if no such rule is in force today, answer NONE.",
+   "gold": "DUNLIN-589",
+   "forbidden": []
+  },
+  {
+   "op": "handoff",
+   "tenant": "agent",
+   "ref": "H00-old",
+   "text": "Handoff to my next session \u2014 Tundra billing migration: next step is to run job WREN-314 and then verify the row counts."
+  },
+  {
+   "op": "consume",
+   "tenant": "agent",
+   "ref": "H00-old"
+  },
+  {
+   "op": "handoff",
+   "tenant": "agent",
+   "ref": "H00-new",
+   "text": "Handoff to my next session \u2014 Tundra billing migration: next step is to run job AUKLET-421 and then verify the row counts."
+  },
+  {
+   "op": "ask",
+   "id": "H-topic-00",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "handoff",
+   "variant": "topic",
+   "question": "I am resuming the Tundra billing migration in a new session. What is the next step that was handed off to me and is still pending? Answer with the code.",
+   "gold": "AUKLET-421",
+   "forbidden": [
+    "WREN-314"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "H-generic-00",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "handoff",
+   "variant": "generic",
+   "question": "New session. Is there a handoff still waiting for me? Answer with the code of its next step.",
+   "gold": "AUKLET-421",
+   "forbidden": [
+    "WREN-314"
+   ]
+  },
+  {
+   "op": "consume",
+   "tenant": "agent",
+   "ref": "H00-new"
+  },
+  {
+   "op": "ask",
+   "id": "H-none-00",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "handoff",
+   "variant": "none",
+   "question": "New session. Is there a handoff still waiting for me? Answer with the code of its next step, or NONE if nothing is pending.",
+   "gold": "NONE",
+   "forbidden": [
+    "WREN-314",
+    "AUKLET-421"
+   ]
+  },
+  {
+   "op": "handoff",
+   "tenant": "agent",
+   "ref": "H01-old",
+   "text": "Handoff to my next session \u2014 Halcyon search index rebuild: next step is to start rebuild batch PETREL-627 and watch the queue."
+  },
+  {
+   "op": "consume",
+   "tenant": "agent",
+   "ref": "H01-old"
+  },
+  {
+   "op": "handoff",
+   "tenant": "agent",
+   "ref": "H01-new",
+   "text": "Handoff to my next session \u2014 Halcyon search index rebuild: next step is to start rebuild batch REDSTART-377 and watch the queue."
+  },
+  {
+   "op": "ask",
+   "id": "H-topic-01",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "handoff",
+   "variant": "topic",
+   "question": "I am resuming the Halcyon search index rebuild in a new session. What is the next step that was handed off to me and is still pending? Answer with the code.",
+   "gold": "REDSTART-377",
+   "forbidden": [
+    "PETREL-627"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "H-generic-01",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "handoff",
+   "variant": "generic",
+   "question": "New session. Is there a handoff still waiting for me? Answer with the code of its next step.",
+   "gold": "REDSTART-377",
+   "forbidden": [
+    "PETREL-627"
+   ]
+  },
+  {
+   "op": "consume",
+   "tenant": "agent",
+   "ref": "H01-new"
+  },
+  {
+   "op": "ask",
+   "id": "H-none-01",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "handoff",
+   "variant": "none",
+   "question": "New session. Is there a handoff still waiting for me? Answer with the code of its next step, or NONE if nothing is pending.",
+   "gold": "NONE",
+   "forbidden": [
+    "PETREL-627",
+    "REDSTART-377"
+   ]
+  },
+  {
+   "op": "handoff",
+   "tenant": "agent",
+   "ref": "H02-old",
+   "text": "Handoff to my next session \u2014 Ember certificate rotation: next step is to apply certificate bundle GANNET-717 on the edge nodes."
+  },
+  {
+   "op": "consume",
+   "tenant": "agent",
+   "ref": "H02-old"
+  },
+  {
+   "op": "handoff",
+   "tenant": "agent",
+   "ref": "H02-new",
+   "text": "Handoff to my next session \u2014 Ember certificate rotation: next step is to apply certificate bundle LINNET-197 on the edge nodes."
+  },
+  {
+   "op": "ask",
+   "id": "H-topic-02",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "handoff",
+   "variant": "topic",
+   "question": "I am resuming the Ember certificate rotation in a new session. What is the next step that was handed off to me and is still pending? Answer with the code.",
+   "gold": "LINNET-197",
+   "forbidden": [
+    "GANNET-717"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "H-generic-02",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "handoff",
+   "variant": "generic",
+   "question": "New session. Is there a handoff still waiting for me? Answer with the code of its next step.",
+   "gold": "LINNET-197",
+   "forbidden": [
+    "GANNET-717"
+   ]
+  },
+  {
+   "op": "consume",
+   "tenant": "agent",
+   "ref": "H02-new"
+  },
+  {
+   "op": "ask",
+   "id": "H-none-02",
+   "tenant": "agent",
+   "persona": "agent",
+   "category": "handoff",
+   "variant": "none",
+   "question": "New session. Is there a handoff still waiting for me? Answer with the code of its next step, or NONE if nothing is pending.",
+   "gold": "NONE",
+   "forbidden": [
+    "GANNET-717",
+    "LINNET-197"
+   ]
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "alice",
+   "type": "note",
+   "title": "Umbra team note",
+   "text": "Umbra weekly sync moved to Wednesdays; notes go in the team channel.",
+   "visibility": "tenant",
+   "ref": "filler-umbra"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "alice",
+   "type": "note",
+   "title": "Vertex team note",
+   "text": "Vertex stakeholders asked for a one-page summary before the quarterly review.",
+   "visibility": "tenant",
+   "ref": "filler-vertex"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "alice",
+   "type": "note",
+   "title": "Meridian team note",
+   "text": "The Meridian dashboard now shows p95 latency next to error rate.",
+   "visibility": "tenant",
+   "ref": "filler-meridian"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "alice",
+   "type": "note",
+   "title": "Juniper team note",
+   "text": "Juniper weekly sync moved to Wednesdays; notes go in the team channel.",
+   "visibility": "tenant",
+   "ref": "filler-juniper"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "alice",
+   "type": "note",
+   "title": "Zephyr team note",
+   "text": "Zephyr stakeholders asked for a one-page summary before the quarterly review.",
+   "visibility": "tenant",
+   "ref": "filler-zephyr"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "alice",
+   "type": "note",
+   "title": "Onyx team note",
+   "text": "The Onyx dashboard now shows p95 latency next to error rate.",
+   "visibility": "tenant",
+   "ref": "filler-onyx"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "alice",
+   "type": "note",
+   "title": "Redwood team note",
+   "text": "Redwood weekly sync moved to Wednesdays; notes go in the team channel.",
+   "visibility": "tenant",
+   "ref": "filler-redwood"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "alice",
+   "type": "note",
+   "title": "Fjord team note",
+   "text": "Fjord stakeholders asked for a one-page summary before the quarterly review.",
+   "visibility": "tenant",
+   "ref": "filler-fjord"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "alice",
+   "type": "note",
+   "title": "Aurora team note",
+   "text": "The Aurora dashboard now shows p95 latency next to error rate.",
+   "visibility": "tenant",
+   "ref": "filler-aurora"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "alice",
+   "type": "note",
+   "title": "Cobalt team note",
+   "text": "Cobalt weekly sync moved to Wednesdays; notes go in the team channel.",
+   "visibility": "tenant",
+   "ref": "filler-cobalt"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "alice",
+   "type": "note",
+   "title": "Locker code for the atlas offsite",
+   "text": "Note to self: my locker code for the Atlas offsite is WAGTAIL-517.",
+   "visibility": "private",
+   "ref": "P00-private"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "alice",
+   "type": "decision",
+   "title": "Budget code the atlas offsite is billed to",
+   "text": "Decision: the Atlas offsite is billed to budget code AUKLET-446 for all attendees.",
+   "visibility": "tenant",
+   "ref": "P00-shared"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "agent",
+   "type": "observation",
+   "title": "Guest wifi network name at the atlas venue",
+   "text": "Observed: the Atlas venue guest wifi network is named AUKLET-884.",
+   "visibility": null,
+   "ref": "P00-agent"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "alice",
+   "type": "note",
+   "title": "Door code of my home office i shared for the xenon courier",
+   "text": "Note to self: the courier for Xenon needs my home office door code IBIS-645.",
+   "visibility": "private",
+   "ref": "P01-private"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "alice",
+   "type": "decision",
+   "title": "Meeting room booked for the xenon kickoff",
+   "text": "Decision: the Xenon kickoff happens in meeting room KESTREL-493.",
+   "visibility": "tenant",
+   "ref": "P01-shared"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "agent",
+   "type": "observation",
+   "title": "Parking lot assigned to the xenon team",
+   "text": "Observed: the Xenon team parks in lot NIGHTJAR-222 this quarter.",
+   "visibility": null,
+   "ref": "P01-agent"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "alice",
+   "type": "note",
+   "title": "Personal salary band i am asking for after basalt",
+   "text": "Note to self: after Basalt ships I will ask for salary band CRANE-978.",
+   "visibility": "private",
+   "ref": "P02-private"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "alice",
+   "type": "decision",
+   "title": "Vendor chosen for the basalt catering",
+   "text": "Decision: catering for Basalt goes to vendor SWIFT-946.",
+   "visibility": "tenant",
+   "ref": "P02-shared"
+  },
+  {
+   "op": "memory",
+   "tenant": "team",
+   "persona": "agent",
+   "type": "observation",
+   "title": "Print queue used by the basalt team",
+   "text": "Observed: the Basalt team prints through queue CRANE-562.",
+   "visibility": null,
+   "ref": "P02-agent"
+  },
+  {
+   "op": "barrier",
+   "tenant": "team"
+  },
+  {
+   "op": "ask",
+   "id": "P-private-other-00",
+   "tenant": "team",
+   "persona": "bob",
+   "category": "permission",
+   "variant": "private-other",
+   "question": "What is the locker code for the Atlas offsite? Answer with the code.",
+   "gold": "NONE",
+   "forbidden": [
+    "WAGTAIL-517"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "P-private-owner-00",
+   "tenant": "team",
+   "persona": "alice",
+   "category": "permission",
+   "variant": "private-owner",
+   "question": "What is the locker code for the Atlas offsite? Answer with the code.",
+   "gold": "WAGTAIL-517",
+   "forbidden": []
+  },
+  {
+   "op": "ask",
+   "id": "P-shared-00",
+   "tenant": "team",
+   "persona": "bob",
+   "category": "permission",
+   "variant": "shared",
+   "question": "What is the budget code the Atlas offsite is billed to? Answer with the code.",
+   "gold": "AUKLET-446",
+   "forbidden": []
+  },
+  {
+   "op": "ask",
+   "id": "P-agent-default-00",
+   "tenant": "team",
+   "persona": "bob",
+   "category": "permission",
+   "variant": "agent-default",
+   "question": "What is the guest wifi network name at the Atlas venue? Answer with the code.",
+   "gold": "AUKLET-884",
+   "forbidden": []
+  },
+  {
+   "op": "ask",
+   "id": "P-private-other-01",
+   "tenant": "team",
+   "persona": "bob",
+   "category": "permission",
+   "variant": "private-other",
+   "question": "What is the door code of my home office I shared for the Xenon courier? Answer with the code.",
+   "gold": "NONE",
+   "forbidden": [
+    "IBIS-645"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "P-private-owner-01",
+   "tenant": "team",
+   "persona": "alice",
+   "category": "permission",
+   "variant": "private-owner",
+   "question": "What is the door code of my home office I shared for the Xenon courier? Answer with the code.",
+   "gold": "IBIS-645",
+   "forbidden": []
+  },
+  {
+   "op": "ask",
+   "id": "P-shared-01",
+   "tenant": "team",
+   "persona": "bob",
+   "category": "permission",
+   "variant": "shared",
+   "question": "What is the meeting room booked for the Xenon kickoff? Answer with the code.",
+   "gold": "KESTREL-493",
+   "forbidden": []
+  },
+  {
+   "op": "ask",
+   "id": "P-agent-default-01",
+   "tenant": "team",
+   "persona": "bob",
+   "category": "permission",
+   "variant": "agent-default",
+   "question": "What is the parking lot assigned to the Xenon team? Answer with the code.",
+   "gold": "NIGHTJAR-222",
+   "forbidden": []
+  },
+  {
+   "op": "ask",
+   "id": "P-private-other-02",
+   "tenant": "team",
+   "persona": "bob",
+   "category": "permission",
+   "variant": "private-other",
+   "question": "What is the personal salary band I am asking for after Basalt? Answer with the code.",
+   "gold": "NONE",
+   "forbidden": [
+    "CRANE-978"
+   ]
+  },
+  {
+   "op": "ask",
+   "id": "P-private-owner-02",
+   "tenant": "team",
+   "persona": "alice",
+   "category": "permission",
+   "variant": "private-owner",
+   "question": "What is the personal salary band I am asking for after Basalt? Answer with the code.",
+   "gold": "CRANE-978",
+   "forbidden": []
+  },
+  {
+   "op": "ask",
+   "id": "P-shared-02",
+   "tenant": "team",
+   "persona": "bob",
+   "category": "permission",
+   "variant": "shared",
+   "question": "What is the vendor chosen for the Basalt catering? Answer with the code.",
+   "gold": "SWIFT-946",
+   "forbidden": []
+  },
+  {
+   "op": "ask",
+   "id": "P-agent-default-02",
+   "tenant": "team",
+   "persona": "bob",
+   "category": "permission",
+   "variant": "agent-default",
+   "question": "What is the print queue used by the Basalt team? Answer with the code.",
+   "gold": "CRANE-562",
+   "forbidden": []
+  }
+ ],
+ "sha256": "db7fb526a9d689f6b95daa4ccf445b8936ea1cd925021f66624a478759653839"
+}
