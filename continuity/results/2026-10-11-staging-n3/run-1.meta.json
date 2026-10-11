@@ -1,0 +1,340 @@
+{
+ "run": 1,
+ "date": "2026-10-11",
+ "started_at": "2026-10-11T11:50:36.559193+00:00",
+ "finished_at": "2026-10-11T11:55:39.694413+00:00",
+ "dataset": {
+  "version": "continuity-v1",
+  "seed": 20261011,
+  "per_cell": 3,
+  "sha256": "db7fb526a9d689f6b95daa4ccf445b8936ea1cd925021f66624a478759653839"
+ },
+ "engine": {
+  "rest_url": "http://127.0.0.1:7439",
+  "mcp_url": "http://127.0.0.1:7439/mcp",
+  "version": "0.2.0",
+  "git_hash": "af530899"
+ },
+ "tenants": [
+  "agent",
+  "team"
+ ],
+ "team_mode": "operator",
+ "agent_mode": "signup",
+ "rag": {
+  "embedder": "BAAI/bge-small-en-v1.5",
+  "top_k": 8,
+  "index": "exact cosine, one per workspace"
+ },
+ "reader": {
+  "base_url": "http://127.0.0.1:8201/v1",
+  "requested_model": "deepseek-v4.1-flash",
+  "served_models": [
+   "longcat-2.5-preview-free"
+  ],
+  "temperature": 0
+ },
+ "judge": "exact match on the reader's value (deterministic, no LLM)",
+ "properties": [
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/umbra/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/vertex/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/meridian/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/juniper/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/zephyr/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/onyx/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/redwood/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/fjord/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/aurora/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/cobalt/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/sierra/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/delta/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/nimbus/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/tundra/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/halcyon/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/ember/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/quasar/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/garnet/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/willow/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/atlas/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/xenon/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/basalt/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/cascade/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/yarrow/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/borealis/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/indigo/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/kepler/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/dune/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/lumen/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-notes/pioneer/note.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/umbra/data-retention-policy-v1.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/umbra/data-retention-policy-v2.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/vertex/log-shipping-destination-v1.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/vertex/log-shipping-destination-v2.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/vertex/single-primary-database-failover-plan.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/meridian/on-call-escalation-route-v1.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/meridian/on-call-escalation-route-v2.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/juniper/staging-deploy-approver-group-v1.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/juniper/staging-deploy-approver-group-v2.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/juniper/single-customer-refund-approval-flow.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/zephyr/release-branch-naming-scheme-v1.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/zephyr/release-branch-naming-scheme-v2.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/zephyr/release-branch-naming-scheme-v3.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/onyx/incident-severity-matrix-v1.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/onyx/incident-severity-matrix-v2.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/onyx/incident-severity-matrix-v3.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "POST /documents",
+   "ref": "cb-decisions/onyx/single-log-shipping-destination.md",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "MCP memory_store",
+   "ref": "P00-agent",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "MCP memory_store",
+   "ref": "P01-agent",
+   "value": "internal"
+  },
+  {
+   "property": "agent-write-default-sensitivity",
+   "surface": "MCP memory_store",
+   "ref": "P02-agent",
+   "value": "internal"
+  }
+ ]
+}

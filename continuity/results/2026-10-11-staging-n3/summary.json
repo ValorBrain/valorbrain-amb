@@ -1,0 +1,3787 @@
+{
+ "runs": [
+  {
+   "run": 1,
+   "date": "2026-10-11",
+   "started_at": "2026-10-11T11:50:36.559193+00:00",
+   "finished_at": "2026-10-11T11:55:39.694413+00:00",
+   "dataset": {
+    "version": "continuity-v1",
+    "seed": 20261011,
+    "per_cell": 3,
+    "sha256": "db7fb526a9d689f6b95daa4ccf445b8936ea1cd925021f66624a478759653839"
+   },
+   "engine": {
+    "rest_url": "http://127.0.0.1:7439",
+    "mcp_url": "http://127.0.0.1:7439/mcp",
+    "version": "0.2.0",
+    "git_hash": "af530899"
+   },
+   "tenants": [
+    "agent",
+    "team"
+   ],
+   "team_mode": "operator",
+   "agent_mode": "signup",
+   "rag": {
+    "embedder": "BAAI/bge-small-en-v1.5",
+    "top_k": 8,
+    "index": "exact cosine, one per workspace"
+   },
+   "reader": {
+    "base_url": "http://127.0.0.1:8201/v1",
+    "requested_model": "deepseek-v4.1-flash",
+    "served_models": [
+     "longcat-2.5-preview-free"
+    ],
+    "temperature": 0
+   },
+   "judge": "exact match on the reader's value (deterministic, no LLM)",
+   "properties": [
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/umbra/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/vertex/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/meridian/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/juniper/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/zephyr/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/onyx/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/redwood/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/fjord/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/aurora/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/cobalt/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/sierra/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/delta/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/nimbus/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/tundra/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/halcyon/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/ember/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/quasar/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/garnet/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/willow/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/atlas/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/xenon/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/basalt/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/cascade/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/yarrow/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/borealis/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/indigo/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/kepler/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/dune/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/lumen/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/pioneer/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/umbra/data-retention-policy-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/umbra/data-retention-policy-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/vertex/log-shipping-destination-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/vertex/log-shipping-destination-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/vertex/single-primary-database-failover-plan.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/meridian/on-call-escalation-route-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/meridian/on-call-escalation-route-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/juniper/staging-deploy-approver-group-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/juniper/staging-deploy-approver-group-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/juniper/single-customer-refund-approval-flow.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/zephyr/release-branch-naming-scheme-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/zephyr/release-branch-naming-scheme-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/zephyr/release-branch-naming-scheme-v3.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/onyx/incident-severity-matrix-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/onyx/incident-severity-matrix-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/onyx/incident-severity-matrix-v3.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/onyx/single-log-shipping-destination.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "MCP memory_store",
+     "ref": "P00-agent",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "MCP memory_store",
+     "ref": "P01-agent",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "MCP memory_store",
+     "ref": "P02-agent",
+     "value": "internal"
+    }
+   ]
+  },
+  {
+   "run": 2,
+   "date": "2026-10-11",
+   "started_at": "2026-10-11T11:55:39.950277+00:00",
+   "finished_at": "2026-10-11T12:02:11.458853+00:00",
+   "dataset": {
+    "version": "continuity-v1",
+    "seed": 20261011,
+    "per_cell": 3,
+    "sha256": "db7fb526a9d689f6b95daa4ccf445b8936ea1cd925021f66624a478759653839"
+   },
+   "engine": {
+    "rest_url": "http://127.0.0.1:7439",
+    "mcp_url": "http://127.0.0.1:7439/mcp",
+    "version": "0.2.0",
+    "git_hash": "af530899"
+   },
+   "tenants": [
+    "agent",
+    "team"
+   ],
+   "team_mode": "operator",
+   "agent_mode": "signup",
+   "rag": {
+    "embedder": "BAAI/bge-small-en-v1.5",
+    "top_k": 8,
+    "index": "exact cosine, one per workspace"
+   },
+   "reader": {
+    "base_url": "http://127.0.0.1:8201/v1",
+    "requested_model": "deepseek-v4.1-flash",
+    "served_models": [
+     "longcat-2.5-preview-free"
+    ],
+    "temperature": 0
+   },
+   "judge": "exact match on the reader's value (deterministic, no LLM)",
+   "properties": [
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/umbra/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/vertex/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/meridian/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/juniper/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/zephyr/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/onyx/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/redwood/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/fjord/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/aurora/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/cobalt/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/sierra/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/delta/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/nimbus/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/tundra/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/halcyon/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/ember/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/quasar/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/garnet/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/willow/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/atlas/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/xenon/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/basalt/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/cascade/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/yarrow/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/borealis/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/indigo/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/kepler/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/dune/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/lumen/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/pioneer/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/umbra/data-retention-policy-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/umbra/data-retention-policy-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/vertex/log-shipping-destination-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/vertex/log-shipping-destination-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/vertex/single-primary-database-failover-plan.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/meridian/on-call-escalation-route-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/meridian/on-call-escalation-route-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/juniper/staging-deploy-approver-group-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/juniper/staging-deploy-approver-group-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/juniper/single-customer-refund-approval-flow.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/zephyr/release-branch-naming-scheme-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/zephyr/release-branch-naming-scheme-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/zephyr/release-branch-naming-scheme-v3.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/onyx/incident-severity-matrix-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/onyx/incident-severity-matrix-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/onyx/incident-severity-matrix-v3.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/onyx/single-log-shipping-destination.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "MCP memory_store",
+     "ref": "P00-agent",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "MCP memory_store",
+     "ref": "P01-agent",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "MCP memory_store",
+     "ref": "P02-agent",
+     "value": "internal"
+    }
+   ]
+  },
+  {
+   "run": 3,
+   "date": "2026-10-11",
+   "started_at": "2026-10-11T12:02:12.020976+00:00",
+   "finished_at": "2026-10-11T12:09:22.588891+00:00",
+   "dataset": {
+    "version": "continuity-v1",
+    "seed": 20261011,
+    "per_cell": 3,
+    "sha256": "db7fb526a9d689f6b95daa4ccf445b8936ea1cd925021f66624a478759653839"
+   },
+   "engine": {
+    "rest_url": "http://127.0.0.1:7439",
+    "mcp_url": "http://127.0.0.1:7439/mcp",
+    "version": "0.2.0",
+    "git_hash": "af530899"
+   },
+   "tenants": [
+    "agent",
+    "team"
+   ],
+   "team_mode": "operator",
+   "agent_mode": "signup",
+   "rag": {
+    "embedder": "BAAI/bge-small-en-v1.5",
+    "top_k": 8,
+    "index": "exact cosine, one per workspace"
+   },
+   "reader": {
+    "base_url": "http://127.0.0.1:8201/v1",
+    "requested_model": "deepseek-v4.1-flash",
+    "served_models": [
+     "longcat-2.5-preview-free"
+    ],
+    "temperature": 0
+   },
+   "judge": "exact match on the reader's value (deterministic, no LLM)",
+   "properties": [
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/umbra/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/vertex/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/meridian/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/juniper/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/zephyr/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/onyx/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/redwood/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/fjord/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/aurora/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/cobalt/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/sierra/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/delta/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/nimbus/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/tundra/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/halcyon/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/ember/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/quasar/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/garnet/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/willow/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/atlas/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/xenon/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/basalt/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/cascade/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/yarrow/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/borealis/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/indigo/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/kepler/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/dune/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/lumen/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-notes/pioneer/note.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/umbra/data-retention-policy-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/umbra/data-retention-policy-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/vertex/log-shipping-destination-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/vertex/log-shipping-destination-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/vertex/single-primary-database-failover-plan.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/meridian/on-call-escalation-route-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/meridian/on-call-escalation-route-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/juniper/staging-deploy-approver-group-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/juniper/staging-deploy-approver-group-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/juniper/single-customer-refund-approval-flow.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/zephyr/release-branch-naming-scheme-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/zephyr/release-branch-naming-scheme-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/zephyr/release-branch-naming-scheme-v3.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/onyx/incident-severity-matrix-v1.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/onyx/incident-severity-matrix-v2.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/onyx/incident-severity-matrix-v3.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "POST /documents",
+     "ref": "cb-decisions/onyx/single-log-shipping-destination.md",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "MCP memory_store",
+     "ref": "P00-agent",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "MCP memory_store",
+     "ref": "P01-agent",
+     "value": "internal"
+    },
+    {
+     "property": "agent-write-default-sensitivity",
+     "surface": "MCP memory_store",
+     "ref": "P02-agent",
+     "value": "internal"
+    }
+   ]
+  }
+ ],
+ "summary": {
+  "rag": {
+   "*": {
+    "*": {
+     "n": 126,
+     "runs": 3,
+     "context_ok": {
+      "k": 54,
+      "n": 126,
+      "rate": 0.42857142857142855,
+      "ci95": [
+       0.34553656104284475,
+       0.5158329846189462
+      ],
+      "per_run": [
+       0.42857142857142855,
+       0.42857142857142855,
+       0.42857142857142855
+      ]
+     },
+     "correct": {
+      "k": 87,
+      "n": 126,
+      "rate": 0.6904761904761905,
+      "ci95": [
+       0.6051222263493414,
+       0.7645589852192161
+      ],
+      "per_run": [
+       0.6666666666666666,
+       0.6904761904761905,
+       0.7142857142857143
+      ]
+     },
+     "leak": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0
+     }
+    }
+   },
+   "expiry": {
+    "*": {
+     "n": 36,
+     "runs": 3,
+     "context_ok": {
+      "k": 18,
+      "n": 36,
+      "rate": 0.5,
+      "ci95": [
+       0.34474067624730526,
+       0.6552593237526947
+      ],
+      "per_run": [
+       0.5,
+       0.5,
+       0.5
+      ]
+     },
+     "correct": {
+      "k": 27,
+      "n": 36,
+      "rate": 0.75,
+      "ci95": [
+       0.5892923231679656,
+       0.8624967616077461
+      ],
+      "per_run": [
+       0.75,
+       0.75,
+       0.75
+      ]
+     }
+    },
+    "explicit-expired": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "explicit-valid": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "implicit-expired": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "correct": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     }
+    },
+    "implicit-valid": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    }
+   },
+   "handoff": {
+    "*": {
+     "n": 27,
+     "runs": 3,
+     "context_ok": {
+      "k": 0,
+      "n": 27,
+      "rate": 0.0,
+      "ci95": [
+       6.938893903907228e-18,
+       0.12455903714463581
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "correct": {
+      "k": 8,
+      "n": 27,
+      "rate": 0.2962962962962963,
+      "ci95": [
+       0.15852853317647564,
+       0.4848103338083759
+      ],
+      "per_run": [
+       0.2222222222222222,
+       0.3333333333333333,
+       0.3333333333333333
+      ]
+     }
+    },
+    "generic": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "correct": {
+      "k": 5,
+      "n": 9,
+      "rate": 0.5555555555555556,
+      "ci95": [
+       0.2666473457440297,
+       0.811224570528086
+      ],
+      "per_run": [
+       0.6666666666666666,
+       0.6666666666666666,
+       0.3333333333333333
+      ]
+     }
+    },
+    "none": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "correct": {
+      "k": 2,
+      "n": 9,
+      "rate": 0.2222222222222222,
+      "ci95": [
+       0.06322376231222723,
+       0.5474166563271946
+      ],
+      "per_run": [
+       0.0,
+       0.3333333333333333,
+       0.3333333333333333
+      ]
+     }
+    },
+    "topic": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "correct": {
+      "k": 1,
+      "n": 9,
+      "rate": 0.1111111111111111,
+      "ci95": [
+       0.019890371327130535,
+       0.4350062147680601
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.3333333333333333
+      ]
+     }
+    }
+   },
+   "permission": {
+    "*": {
+     "n": 36,
+     "runs": 3,
+     "context_ok": {
+      "k": 27,
+      "n": 36,
+      "rate": 0.75,
+      "ci95": [
+       0.5892923231679656,
+       0.8624967616077461
+      ],
+      "per_run": [
+       0.75,
+       0.75,
+       0.75
+      ]
+     },
+     "correct": {
+      "k": 27,
+      "n": 36,
+      "rate": 0.75,
+      "ci95": [
+       0.5892923231679656,
+       0.8624967616077461
+      ],
+      "per_run": [
+       0.75,
+       0.75,
+       0.75
+      ]
+     },
+     "leak": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0
+     }
+    },
+    "agent-default": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "private-other": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "correct": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "leak": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0
+     }
+    },
+    "private-owner": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "shared": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    }
+   },
+   "supersession": {
+    "*": {
+     "n": 27,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 27,
+      "rate": 0.3333333333333333,
+      "ci95": [
+       0.1864305444359335,
+       0.5217558012789452
+      ],
+      "per_run": [
+       0.3333333333333333,
+       0.3333333333333333,
+       0.3333333333333333
+      ]
+     },
+     "correct": {
+      "k": 25,
+      "n": 27,
+      "rate": 0.9259259259259259,
+      "ci95": [
+       0.7663002270926937,
+       0.9794457783026165
+      ],
+      "per_run": [
+       0.8888888888888888,
+       0.8888888888888888,
+       1.0
+      ]
+     }
+    },
+    "control": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "explicit": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "implicit": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "correct": {
+      "k": 7,
+      "n": 9,
+      "rate": 0.7777777777777778,
+      "ci95": [
+       0.4525833436728054,
+       0.9367762376877727
+      ],
+      "per_run": [
+       0.6666666666666666,
+       0.6666666666666666,
+       1.0
+      ]
+     }
+    }
+   }
+  },
+  "rag-per-user": {
+   "*": {
+    "*": {
+     "n": 36,
+     "runs": 3,
+     "context_ok": {
+      "k": 18,
+      "n": 36,
+      "rate": 0.5,
+      "ci95": [
+       0.34474067624730526,
+       0.6552593237526947
+      ],
+      "per_run": [
+       0.5,
+       0.5,
+       0.5
+      ]
+     },
+     "correct": {
+      "k": 18,
+      "n": 36,
+      "rate": 0.5,
+      "ci95": [
+       0.34474067624730526,
+       0.6552593237526947
+      ],
+      "per_run": [
+       0.5,
+       0.5,
+       0.5
+      ]
+     },
+     "leak": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0
+     }
+    }
+   },
+   "permission": {
+    "*": {
+     "n": 36,
+     "runs": 3,
+     "context_ok": {
+      "k": 18,
+      "n": 36,
+      "rate": 0.5,
+      "ci95": [
+       0.34474067624730526,
+       0.6552593237526947
+      ],
+      "per_run": [
+       0.5,
+       0.5,
+       0.5
+      ]
+     },
+     "correct": {
+      "k": 18,
+      "n": 36,
+      "rate": 0.5,
+      "ci95": [
+       0.34474067624730526,
+       0.6552593237526947
+      ],
+      "per_run": [
+       0.5,
+       0.5,
+       0.5
+      ]
+     },
+     "leak": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0
+     }
+    },
+    "agent-default": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "correct": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     }
+    },
+    "private-other": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "leak": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0
+     }
+    },
+    "private-owner": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "shared": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "correct": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     }
+    }
+   }
+  },
+  "valorbrain": {
+   "*": {
+    "*": {
+     "n": 126,
+     "runs": 3,
+     "context_ok": {
+      "k": 126,
+      "n": 126,
+      "rate": 1.0,
+      "ci95": [
+       0.9704131803674632,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 126,
+      "n": 126,
+      "rate": 1.0,
+      "ci95": [
+       0.9704131803674632,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "leak": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0
+     }
+    }
+   },
+   "expiry": {
+    "*": {
+     "n": 36,
+     "runs": 3,
+     "context_ok": {
+      "k": 36,
+      "n": 36,
+      "rate": 1.0,
+      "ci95": [
+       0.9035781695514236,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 36,
+      "n": 36,
+      "rate": 1.0,
+      "ci95": [
+       0.9035781695514236,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "explicit-expired": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "explicit-valid": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "implicit-expired": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "implicit-valid": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    }
+   },
+   "handoff": {
+    "*": {
+     "n": 27,
+     "runs": 3,
+     "context_ok": {
+      "k": 27,
+      "n": 27,
+      "rate": 1.0,
+      "ci95": [
+       0.8754409628553641,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 27,
+      "n": 27,
+      "rate": 1.0,
+      "ci95": [
+       0.8754409628553641,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "generic": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "none": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "topic": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    }
+   },
+   "permission": {
+    "*": {
+     "n": 36,
+     "runs": 3,
+     "context_ok": {
+      "k": 36,
+      "n": 36,
+      "rate": 1.0,
+      "ci95": [
+       0.9035781695514236,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 36,
+      "n": 36,
+      "rate": 1.0,
+      "ci95": [
+       0.9035781695514236,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "leak": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0
+     }
+    },
+    "agent-default": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "private-other": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "leak": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0
+     }
+    },
+    "private-owner": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "shared": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    }
+   },
+   "supersession": {
+    "*": {
+     "n": 27,
+     "runs": 3,
+     "context_ok": {
+      "k": 27,
+      "n": 27,
+      "rate": 1.0,
+      "ci95": [
+       0.8754409628553641,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 27,
+      "n": 27,
+      "rate": 1.0,
+      "ci95": [
+       0.8754409628553641,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "control": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "explicit": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "implicit": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    }
+   }
+  },
+  "valorbrain-prepare": {
+   "*": {
+    "*": {
+     "n": 126,
+     "runs": 3,
+     "context_ok": {
+      "k": 108,
+      "n": 126,
+      "rate": 0.8571428571428571,
+      "ci95": [
+       0.7854653227896695,
+       0.9076869489013755
+      ],
+      "per_run": [
+       0.8571428571428571,
+       0.8571428571428571,
+       0.8571428571428571
+      ]
+     },
+     "correct": {
+      "k": 123,
+      "n": 126,
+      "rate": 0.9761904761904762,
+      "ci95": [
+       0.9323328336766188,
+       0.9918701952447746
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       0.9285714285714286
+      ]
+     },
+     "leak": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0
+     }
+    }
+   },
+   "expiry": {
+    "*": {
+     "n": 36,
+     "runs": 3,
+     "context_ok": {
+      "k": 36,
+      "n": 36,
+      "rate": 1.0,
+      "ci95": [
+       0.9035781695514236,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 34,
+      "n": 36,
+      "rate": 0.9444444444444444,
+      "ci95": [
+       0.8185502589238878,
+       0.9846303362329332
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       0.8333333333333334
+      ]
+     }
+    },
+    "explicit-expired": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "explicit-valid": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "implicit-expired": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "implicit-valid": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 7,
+      "n": 9,
+      "rate": 0.7777777777777778,
+      "ci95": [
+       0.4525833436728054,
+       0.9367762376877727
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       0.3333333333333333
+      ]
+     }
+    }
+   },
+   "handoff": {
+    "*": {
+     "n": 27,
+     "runs": 3,
+     "context_ok": {
+      "k": 27,
+      "n": 27,
+      "rate": 1.0,
+      "ci95": [
+       0.8754409628553641,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 27,
+      "n": 27,
+      "rate": 1.0,
+      "ci95": [
+       0.8754409628553641,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "generic": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "none": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "topic": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    }
+   },
+   "permission": {
+    "*": {
+     "n": 36,
+     "runs": 3,
+     "context_ok": {
+      "k": 36,
+      "n": 36,
+      "rate": 1.0,
+      "ci95": [
+       0.9035781695514236,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 35,
+      "n": 36,
+      "rate": 0.9722222222222222,
+      "ci95": [
+       0.8582996626496918,
+       0.9950797197044302
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       0.9166666666666666
+      ]
+     },
+     "leak": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0
+     }
+    },
+    "agent-default": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "private-other": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 8,
+      "n": 9,
+      "rate": 0.8888888888888888,
+      "ci95": [
+       0.5649937852319399,
+       0.9801096286728695
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       0.6666666666666666
+      ]
+     },
+     "leak": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0
+     }
+    },
+    "private-owner": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "shared": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    }
+   },
+   "supersession": {
+    "*": {
+     "n": 27,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 27,
+      "rate": 0.3333333333333333,
+      "ci95": [
+       0.1864305444359335,
+       0.5217558012789452
+      ],
+      "per_run": [
+       0.3333333333333333,
+       0.3333333333333333,
+       0.3333333333333333
+      ]
+     },
+     "correct": {
+      "k": 27,
+      "n": 27,
+      "rate": 1.0,
+      "ci95": [
+       0.8754409628553641,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "control": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "explicit": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "implicit": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    }
+   }
+  },
+  "valorbrain-retrieve": {
+   "*": {
+    "*": {
+     "n": 126,
+     "runs": 3,
+     "context_ok": {
+      "k": 108,
+      "n": 126,
+      "rate": 0.8571428571428571,
+      "ci95": [
+       0.7854653227896695,
+       0.9076869489013755
+      ],
+      "per_run": [
+       0.8571428571428571,
+       0.8571428571428571,
+       0.8571428571428571
+      ]
+     },
+     "correct": {
+      "k": 108,
+      "n": 126,
+      "rate": 0.8571428571428571,
+      "ci95": [
+       0.7854653227896695,
+       0.9076869489013755
+      ],
+      "per_run": [
+       0.8571428571428571,
+       0.8571428571428571,
+       0.8571428571428571
+      ]
+     },
+     "leak": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0
+     }
+    }
+   },
+   "expiry": {
+    "*": {
+     "n": 36,
+     "runs": 3,
+     "context_ok": {
+      "k": 36,
+      "n": 36,
+      "rate": 1.0,
+      "ci95": [
+       0.9035781695514236,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 36,
+      "n": 36,
+      "rate": 1.0,
+      "ci95": [
+       0.9035781695514236,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "explicit-expired": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "explicit-valid": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "implicit-expired": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "implicit-valid": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    }
+   },
+   "handoff": {
+    "*": {
+     "n": 27,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 27,
+      "rate": 0.3333333333333333,
+      "ci95": [
+       0.1864305444359335,
+       0.5217558012789452
+      ],
+      "per_run": [
+       0.3333333333333333,
+       0.3333333333333333,
+       0.3333333333333333
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 27,
+      "rate": 0.3333333333333333,
+      "ci95": [
+       0.1864305444359335,
+       0.5217558012789452
+      ],
+      "per_run": [
+       0.3333333333333333,
+       0.3333333333333333,
+       0.3333333333333333
+      ]
+     }
+    },
+    "generic": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "correct": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     }
+    },
+    "none": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "topic": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "correct": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.2991527535509594
+      ],
+      "per_run": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     }
+    }
+   },
+   "permission": {
+    "*": {
+     "n": 36,
+     "runs": 3,
+     "context_ok": {
+      "k": 36,
+      "n": 36,
+      "rate": 1.0,
+      "ci95": [
+       0.9035781695514236,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 36,
+      "n": 36,
+      "rate": 1.0,
+      "ci95": [
+       0.9035781695514236,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "leak": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0
+     }
+    },
+    "agent-default": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "private-other": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "leak": {
+      "k": 0,
+      "n": 9,
+      "rate": 0.0
+     }
+    },
+    "private-owner": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "shared": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    }
+   },
+   "supersession": {
+    "*": {
+     "n": 27,
+     "runs": 3,
+     "context_ok": {
+      "k": 27,
+      "n": 27,
+      "rate": 1.0,
+      "ci95": [
+       0.8754409628553641,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 27,
+      "n": 27,
+      "rate": 1.0,
+      "ci95": [
+       0.8754409628553641,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "control": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "explicit": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    },
+    "implicit": {
+     "n": 9,
+     "runs": 3,
+     "context_ok": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "correct": {
+      "k": 9,
+      "n": 9,
+      "rate": 1.0,
+      "ci95": [
+       0.7008472464490407,
+       1.0
+      ],
+      "per_run": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     }
+    }
+   }
+  }
+ },
+ "properties": {
+  "agent-write-default-sensitivity via POST /documents": {
+   "internal": 141
+  },
+  "agent-write-default-sensitivity via MCP memory_store": {
+   "internal": 9
+  }
+ }
+}
