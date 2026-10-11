@@ -1,8 +1,11 @@
 """
 ValorBrain memory provider for the Agent Memory Benchmark.
 
-ValorBrain is a hybrid memory engine: BM25 + dense vectors (pgvector) + RRF +
-graph reranking + BGE cross-encoder rerank, all on PostgreSQL with RLS.
+Retrieval pipeline: BM25 (Portuguese and English) and dense vectors (LFM2.5-Embedding-350M,
+1024 dimensions) fused by reciprocal-rank fusion, then a cross-encoder rerank
+(BGE-Reranker-v2-m3) and MMR for diversity, on PostgreSQL with row-level security. An LLM
+only expands the query; it never ranks. Personalized PageRank exists behind a flag and is
+off in production.
 
 This provider talks to a running ValorBrain engine instance via its REST API.
 Set VALORBRAIN_URL (default https://valorbrain-api.valor.digital) and VALORBRAIN_TOKEN.
@@ -26,8 +29,8 @@ logger = logging.getLogger(__name__)
 class ValorBrainMemoryProvider(MemoryProvider):
     name = "valorbrain"
     description = (
-        "ValorBrain hybrid memory engine — BM25 + dense (pgvector) + RRF + "
-        "graph reranking + BGE cross-encoder rerank on PostgreSQL."
+        "ValorBrain memory engine — BM25 + dense vectors fused by RRF, cross-encoder "
+        "rerank and MMR on PostgreSQL."
     )
     kind = "cloud"
     link = "https://valor.digital"
