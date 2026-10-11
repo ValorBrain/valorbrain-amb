@@ -1,10 +1,10 @@
 # valorbrain-amb
 
-This is the **ValorBrain fork** of the [Agent Memory Benchmark (AMB)](https://agentmemorybenchmark.ai) — the open benchmark published by Hindsight/Vectorize (`vectorize-io/open-memory-benchmark`). We use AMB to evaluate the ValorBrain memory engine head-to-head against Hindsight, mem0, and other memory systems on long-conversation recall.
+This is the **ValorBrain fork** of the [Agent Memory Benchmark (AMB)](https://agentmemorybenchmark.ai), the open benchmark published by Hindsight/Vectorize (`vectorize-io/agent-memory-benchmark`). We use AMB to measure the ValorBrain memory engine on long-conversation memory (BEAM).
 
 Public mirror: **[github.com/ValorBrain/valorbrain-amb](https://github.com/ValorBrain/valorbrain-amb)**
 
-> AMB's own pitch (why it exists, what it measures, reproducibility rules) is preserved at the bottom of this file. This README documents **what the fork adds and how to run it**.
+> AMB's own pitch (why it exists, what it measures, reproducibility rules) is preserved at the bottom of this file. This README documents **what the fork adds, how to run it, and what we measured with it**.
 
 ---
 
@@ -22,7 +22,7 @@ Five additions on top of upstream AMB. All plug into AMB's existing provider reg
 
 ### ValorBrain memory provider
 
-Talks to a running ValorBrain engine instance over its REST API. The engine is a hybrid memory pipeline — BM25 + dense vectors (pgvector) + reciprocal-rank fusion + graph reranking + BGE cross-encoder rerank — on PostgreSQL with row-level security.
+Talks to a running ValorBrain engine instance over its REST API. Retrieval pipeline (the same description as valorbrain.com.br and docs.valorbrain.com.br): BM25 (Portuguese and English) and dense vectors (LFM2.5-Embedding-350M, 1024 dimensions) fused by reciprocal-rank fusion, then a cross-encoder rerank (BGE-Reranker-v2-m3) and MMR for diversity, on PostgreSQL with row-level security. An LLM only expands the query; it never ranks. Personalized PageRank exists behind a flag and is off in production.
 
 Two behaviors worth knowing:
 
@@ -31,13 +31,11 @@ Two behaviors worth knowing:
 
 ### GLM-5.2 LLM
 
-GLM-5.2 is a reasoning model (Z.ai coding plan): the answer appears in `reasoning_content` when `content` is empty. Since Z.ai has no `response_format` support, JSON is extracted prompt-side. This is the reader that scored **70.9% on BEAM-100K (312/400)** — 5 of 10 category wins vs Hindsight.
-
-> Newer headline: **80.8% (323/400)** with `stealth/ox-alpha` via OpenRouter at `reasoning.effort=max` — see the [Results](#results) section and the [writeup](https://valorbrain.valor.digital/research/beam-100k-sota-ox-alpha-reasoning-effort). The ox-alpha reader runs through the Gateway LLM provider below.
+GLM-5.2 is a reasoning model (Z.ai coding plan): the answer appears in `reasoning_content` when `content` is empty. Since Z.ai has no `response_format` support, JSON is extracted prompt-side. In the published runs below GLM-5.2 is the **judge**, not the reader.
 
 ### Gateway LLM
 
-Plain-HTTP OpenAI-compatible client with no `response_format` dependency (built to talk to an `opencode-go` gateway serving e.g. `deepseek-v4-flash`). Prompt-based JSON extraction, exponential-backoff retries (4 attempts). The base for both the GLM provider (subclass) and any generic OpenAI-compatible endpoint.
+Plain-HTTP OpenAI-compatible client with no `response_format` dependency (built to talk to an `opencode-go` gateway serving e.g. `deepseek-v4-flash`). Prompt-based JSON extraction, exponential-backoff retries (4 attempts). The base for both the GLM provider (subclass) and any generic OpenAI-compatible endpoint, including OpenRouter (how the GLM-5.3 Flash reader below was called).
 
 ### AGY direct LLM
 
@@ -45,7 +43,7 @@ Calls the `agy` (Antigravity) CLI via subprocess — Gemini without an HTTP gate
 
 ### Checkpoint runner
 
-BEAM-100K is 100 conversations × 20 questions = 2000 queries (the fork runs a 400-question subset, 20 conversations). A single `amb run` ingests and queries everything in one process, so a crash or rate-limit midway loses everything. The checkpoint runner (`scripts/run-with-checkpoint.py`) runs **one conversation at a time**, merges results into the main output file after each, and on restart skips conversations already completed. See [Checkpoint runner](#checkpoint-runner) below.
+The BEAM 100K split is 20 conversations × 20 questions = 400 questions (BEAM as a whole has 100 conversations and 2,000 questions across the 100K, 500K, 1M and 10M splits). A single `amb run` ingests and queries everything in one process, so a crash or rate-limit midway loses everything. The checkpoint runner (`scripts/run-with-checkpoint.py`) runs **one conversation at a time**, merges results into the main output file after each, and on restart skips conversations already completed. See [Checkpoint runner](#checkpoint-runner-1) below.
 
 ---
 
@@ -148,7 +146,7 @@ What it does:
 
 1. Reads completed conversation IDs from the merged output file (`outputs/beam/valorbrain-gemini-judge-full/rag/100k.json`).
 2. For each remaining conversation, runs `amb run --dataset beam --split 100k --memory valorbrain --unit <n> --llm glm --name ckpt-<n>`.
-3. Merges that conversation's results into the main file (deduplicating by `query_id`), recomputes totals/accuracy, and deletes the per-conversation file.
+3. Merges that conversation's results into the main file (deduplicating by `query_id`), recomputes totals, and deletes the per-conversation file.
 4. Stops on the first failed conversation (exit ≠ 0) so you can inspect and re-run. On restart it picks up from the last good checkpoint.
 
 > The unit list, output path, and `amb` binary path are constants at the top of the script (`ALL_UNITS`, `OUTPUT`, the `cmd` list). Edit them before running a different configuration.
@@ -161,12 +159,12 @@ These are changes to upstream AMB behavior that this fork relies on.
 
 ### Judge override
 
-By default each dataset picks its own judge model (e.g. BEAM uses `gemini-3.5-flash` for head-to-head parity with Hindsight/mem0, whose nugget-judge rubric BEAM mirrors). The runner's `_get_judge()` (`src/memory_bench/runner.py`) lets `OMB_JUDGE_LLM` override this:
+By default each dataset picks its own judge model (BEAM's `default_judge_llm()` returns `gemini-3.5-flash`). The runner's `_get_judge()` (`src/memory_bench/runner.py`) lets `OMB_JUDGE_LLM` override this:
 
-- **`OMB_JUDGE_LLM` unset or `gemini`** → the dataset's `default_judge_llm()` wins (the parity path).
+- **`OMB_JUDGE_LLM` unset or `gemini`** → the dataset's `default_judge_llm()` wins.
 - **`OMB_JUDGE_LLM` set to another provider** (e.g. `glm`, `gateway`) → that provider judges instead, via `get_judge_llm()`. Pair with `OMB_JUDGE_MODEL` to pin the exact model.
 
-This is how the fork can run a GLM reader with a Gemini judge, or a fully non-Gemini (reader + judge) configuration.
+Every published ValorBrain run below used this override (judge `glm:glm-5.2`). The Hindsight runs on the AMB scoreboard were judged by Gemini models, so a ValorBrain number and a Hindsight number are never a head-to-head.
 
 ### Gemini key gate
 
@@ -176,37 +174,76 @@ Upstream AMB hard-fails without a Gemini key because the judge and reader defaul
 
 ## Results
 
-**Model identity (2026-08-25)**: `stealth/ox-alpha` was revealed to be **GLM-5.3-flash (Z.ai)** served via OpenRouter under the stealth alias. Scores stand as measured; reader and judge are both Z.ai models (glm-5.2 judges), consistent across all runs including baselines.
+Every number in this section is recomputed from a file in `results/` by `scripts/beam_summary.py`, and `tests/test_readme_metrics.py` fails the build if a number here drifts from its file or if a line mixes two metrics.
 
-Headline: **80.8% on BEAM-100K** (323/400)
+**Metrics.** Each line carries exactly one metric:
 
-**BEAM-10M**: **51.2%** runner accuracy (112/200 binary) on the 10M-token split — 10 giant documents, ~110M tokens. +10.6pp over Hindsight RAG (40.6%). Run: `results/beam-10m-ox-alpha-effortmax-200q.json`. with stealth/ox-alpha as reader at `reasoning.effort=max` — first run above 80% on this harness. Progression: 70.9% (GLM-5.2) → 78.2% (ox-alpha, default effort) → 80.8% (ox-alpha, max effort). The full run lives at `results/beam-100k-ox-alpha-effortmax-400q.json`. Full writeup: https://valorbrain.valor.digital/research/beam-100k-sota-ox-alpha-reasoning-effort
+- **avg-score** is the AMB scoreboard metric: the mean judge score (0 to 1 per question, partial credit allowed) over the questions the judge scored. It is the `accuracy` field AMB writes.
+- **binary** is the share of all questions the judge marked correct (`correct / total_queries`).
 
----
+**Interval.** The 95% CI is a percentile bootstrap over conversations (10,000 resamples, fixed seed). It covers sampling error over questions inside one run; it is not run-to-run variance.
 
-## Per-category (400 queries)
+**Runs.** The PRD target is N ≥ 3 runs per configuration with a confidence interval. We are not there: the BEAM-100K headline configuration has N = 1 run and the BEAM-10M configuration has N = 2 runs. The reader used for both (`stealth/ox-alpha` on OpenRouter) was a time-limited stealth listing, so new runs need a different reader and will be published as a new configuration, not as extra runs of this one.
 
-| Category | ValorBrain | Hindsight (sq) | Gap |
-|----------|-----------|----------------|-----|
-| Information Extraction | **88.9%** | 64.9% | +24.0 |
-| Temporal Reasoning | **71.9%** | 57.5% | +14.4 |
-| Knowledge Update | **70.6%** | 58.8% | +11.8 |
-| Multi-session Reasoning | **57.2%** | 47.4% | +9.8 |
-| Contradiction Resolution | **67.2%** | 61.6% | +5.6 |
-| Preference Following | 91.0% | 95.0% | -4.0 |
-| Instruction Following | 83.8% | 91.2% | -7.5 |
-| Summarization | 64.5% | 79.3% | -14.8 |
-| Event Ordering | 46.4% | 80.5% | -34.1 |
-| Abstention | 67.5% | 97.5% | -30.0 |
+**Reader and product default.** The reader is not part of the product: ValorBrain returns context and the customer's own LLM writes the answer. GLM-5.3 Flash at `reasoning.effort=max` is a benchmark configuration, not a product default. The memory side runs the production path (`/api/v1/memory/prepare`) on a staging engine.
 
+**Reader identity.** `stealth/ox-alpha` was revealed on 2026-08-25 to be **GLM-5.3 Flash (Z.ai)** served by OpenRouter under a stealth alias. Run files keep the alias as recorded.
 
+### BEAM-100K — headline run (2026-08-23)
 
-## Per-category — ox-alpha effort=max (80.8%)
+- File: `results/beam-100k-ox-alpha-effortmax-400q.json`
+- Dataset: BEAM 100K split, the whole split: 20 conversations, 400 questions
+- Reader: GLM-5.3 Flash (`openai:stealth/ox-alpha`), `reasoning.effort=max`; not the product default
+- Judge: GLM-5.2 (`glm:glm-5.2`)
+- avg-score: 75.5% (95% CI 72.5%–78.5%; 398 scored questions)
+- binary: 80.8% (323/400) (95% CI 78.0%–83.5%)
+- Runs: N = 1
 
+### BEAM-10M — run (2026-08-24)
 
-| Category | Default effort (78.2%) | Max effort (80.8%) | Δ |
-|----------|-----------------------:|-------------------:|---:|
-| Preference Following | 90.0% | **100%** | +10.0 |
+- File: `results/beam-10m-ox-alpha-effortmax-200q.json`
+- Dataset: BEAM 10M split, the whole split: 10 conversations of about 10M tokens each, 200 questions
+- Reader: GLM-5.3 Flash (`openai:stealth/ox-alpha`), `reasoning.effort=max`; not the product default
+- Judge: GLM-5.2 (`glm:glm-5.2`)
+- avg-score: 51.2% (95% CI 44.9%–57.4%; 200 scored questions)
+- binary: 56.0% (112/200) (95% CI 48.5%–63.0%)
+- Runs: N = 2 (second run below)
+- Ingest: about 15 minutes; the provider sends `skip_noise_filter=true`, which only disables the engine's heartbeat/ping rejection for these windows
+
+### BEAM-10M — second run, same configuration (2026-08-24)
+
+- File: `results/beam-10m-ox-alpha-effortmax-200q-run2.json.gz`
+- Same run name, reader, judge and collections as the run above; 141 of 200 retrieved contexts are byte-identical between the two runs
+- avg-score: 50.7% (95% CI 44.6%–57.0%; 200 scored questions)
+- binary: 56.0% (112/200) (95% CI 49.0%–63.0%)
+
+### Where the BEAM-100K headline came from (same harness, same judge, same 400 questions)
+
+The three runs below used the same staging engine, the same judge (`glm:glm-5.2`) and the same 400 questions, two days apart; only the reader and its reasoning effort change. Retrieval is not bit-identical between runs (184 to 262 of 400 contexts match), so each step also carries run noise.
+
+| Step | File | Reader | avg-score | Change in avg-score |
+|---|---|---|---:|---:|
+| Baseline | `results/beam-100k-gemini36flash-effortdefault-400q.json.gz` | Gemini 3.6 Flash (`agy:gemini-3.6-flash`) | 69.3% | — |
+| Reader swap | `results/beam-100k-ox-alpha-effortdefault-400q.json.gz` | GLM-5.3 Flash, default effort | 72.3% | +3.0 pp |
+| Reasoning effort | `results/beam-100k-ox-alpha-effortmax-400q.json` | GLM-5.3 Flash, `effort=max` | 75.5% | +3.2 pp |
+| Total | | | | +6.2 pp |
+
+| Step | File | Reader | binary | Questions gained |
+|---|---|---|---:|---:|
+| Baseline | `results/beam-100k-gemini36flash-effortdefault-400q.json.gz` | Gemini 3.6 Flash | 76.0% (304/400) | — |
+| Reader swap | `results/beam-100k-ox-alpha-effortdefault-400q.json.gz` | GLM-5.3 Flash, default effort | 78.3% (313/400) | +9 |
+| Reasoning effort | `results/beam-100k-ox-alpha-effortmax-400q.json` | GLM-5.3 Flash, `effort=max` | 80.8% (323/400) | +10 |
+| Total | | | | +19 |
+
+The whole gain from the baseline to the headline is on the reader side. We no longer publish a "memory engineering vs reader" split: the earlier split mixed runs with different judges, question counts and metrics, and does not survive recomputation from the run files.
+
+### Per category — BEAM-100K, reasoning effort default vs max (same harness, same judge)
+
+- Files: `results/beam-100k-ox-alpha-effortdefault-400q.json.gz` (default effort), `results/beam-100k-ox-alpha-effortmax-400q.json` (effort=max)
+
+| Category | binary, default effort | binary, effort=max | Δ (pp) |
+|---|---:|---:|---:|
+| Preference Following | 90.0% | 100.0% | +10.0 |
 | Information Extraction | 87.5% | 92.5% | +5.0 |
 | Instruction Following | 87.5% | 92.5% | +5.0 |
 | Temporal Reasoning | 70.0% | 75.0% | +5.0 |
@@ -217,12 +254,22 @@ Headline: **80.8% on BEAM-100K** (323/400)
 | Abstention | 65.0% | 65.0% | 0.0 |
 | Event Ordering | 62.5% | 57.5% | -5.0 |
 
+### Context from the AMB scoreboard (not a head-to-head)
 
-## Key finding
+These are Hindsight's runs as published in `results-manifest.json` (the AMB scoreboard). Same dataset splits and the same avg-score metric, but a different reader, a different judge and a different AMB response mode, so the gap is context, not a controlled comparison.
 
-58% of our total improvement came from reader-agnostic memory engineering. Consolidation, timeline, and delivery improvements that benefit any LLM. The reader swap contributed 42%.
+| Split | System (mode) | Reader | Judge | avg-score |
+|---|---|---|---|---:|
+| 10M | Hindsight (single-query) | Gemini 3.1 Pro preview | Gemini 2.5 Flash Lite | 64.1% |
+| 100K | Hindsight (single-query) | Gemini 3.1 Pro preview | Gemini 2.5 Flash Lite | 73.4% |
+| 100K | Hindsight (rag) | not recorded in the manifest | not recorded in the manifest | 86.2% |
 
-Full analysis: [Memory Quality Beats Reader Quality](https://valorbrain.valor.digital/research/memory-quality-beats-reader-quality-beam-100k)
+### Scales
+
+- Measured: BEAM-100K (2026-08-23) and BEAM-10M (2026-08-24).
+- Not run yet: BEAM-500K and BEAM-1M.
+
+---
 
 ## Reproducing
 
@@ -232,19 +279,21 @@ ValorBrain is a hosted memory API. To reproduce our results:
 2. **Get your API key** from the dashboard
 3. **Install the AMB** with our provider (see [REPRODUCE.md](REPRODUCE.md))
 4. **Run the benchmark** with your API key
-
-This is the same model as Hindsight and mem0-cloud: proprietary engine, public API, reproducible results.
+5. **Recompute the numbers** with `python3 scripts/beam_summary.py`
 
 ## What's in this repo
 
-- `provider/valorbrain.py` — ValorBrain memory provider for AMB
-- `provider/glm.py` — GLM-5.2 LLM provider (any OpenAI-compatible endpoint)
-- `provider/gateway.py` — Generic OpenAI-compatible LLM provider
-- `provider/agy_direct.py` — Direct AGY CLI caller (Gemini via Antigravity)
-- `results/beam-100k-ox-alpha-effortmax-400q.json` — Official 400-query results, ox-alpha reader at reasoning effort=max (80.8%)
-- `results/beam-100k-glm-gemini-judge-400q.json` — Official 400-query results
+- `src/memory_bench/memory/valorbrain.py` — ValorBrain memory provider for AMB
+- `src/memory_bench/llm/glm.py` — GLM-5.2 LLM provider (any OpenAI-compatible endpoint)
+- `src/memory_bench/llm/gateway.py` — Generic OpenAI-compatible LLM provider
+- `src/memory_bench/llm/agy_direct.py` — Direct AGY CLI caller (Gemini via Antigravity)
+- `results/` — the run files every number above is computed from
+- `scripts/beam_summary.py` — recomputes avg-score, binary, CIs and per-category tables from `results/`
+- `tests/test_readme_metrics.py` — fails when this README mixes metrics or drifts from `results/`
 - `scripts/run-with-checkpoint.py` — Checkpoint runner (resume after interruptions)
 - `REPRODUCE.md` — Step-by-step reproduction guide
+
+Run the README check with `python3 -m unittest discover -s tests -v` (standard library only).
 
 ## License
 
