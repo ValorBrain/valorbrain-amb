@@ -16,10 +16,11 @@ from unittest import mock
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
+import memory_bench.llm as llm_pkg  # noqa: E402
 from memory_bench.llm import get_answer_llm, get_judge_llm  # noqa: E402
 from memory_bench.llm import gateway  # noqa: E402
-from memory_bench.llm.base import Schema  # noqa: E402
-from memory_bench.llm.gateway import GatewayLLM, normalize_model_name  # noqa: E402
+from memory_bench.llm.base import LLM, Schema  # noqa: E402
+from memory_bench.llm.gateway import GatewayLLM, ServedModelMismatch, normalize_model_name  # noqa: E402
 
 SCHEMA = Schema(properties={"answer": {"type": "string"}}, required=["answer"])
 READER_EXTRA = {"thinking": {"type": "adaptive"}, "output_config": {"effort": "low"}}
@@ -136,17 +137,19 @@ class ExtraBodyTest(GatewayTestCase):
 
 
 class StrictModelTest(GatewayTestCase):
-    def test_mismatch_fails_after_retries_naming_both(self):
+    def test_mismatch_fails_at_once_naming_both(self):
         fake = _FakeHTTP(_completion(model="deepseek-v4.1-flash"),
                          {"x-valorbrain-gateway-model": "longcat-2.5-preview-free"})
         llm = GatewayLLM("deepseek-v4.1-flash", strict_model=True)
-        with self.assertRaises(RuntimeError) as ctx:
+        with self.assertRaises(ServedModelMismatch) as ctx:
             self.run_generate(llm, fake)
         message = str(ctx.exception)
-        self.assertIn(f"failed after {gateway._MAX_RETRIES} retries", message)
-        self.assertIn("deepseek-v4.1-flash", message)
-        self.assertIn("longcat-2.5-preview-free", message)
-        self.assertEqual(len(fake.payloads), gateway._MAX_RETRIES)
+        self.assertIn("requested deepseek-v4.1-flash but gateway served longcat-2.5-preview-free", message)
+        # Deterministic failure: exactly one call, no retry sleep.
+        self.assertEqual(len(fake.payloads), 1)
+        self.sleep.assert_not_called()
+        # Still a RuntimeError for callers that only know the generic failure.
+        self.assertIsInstance(ctx.exception, RuntimeError)
 
     def test_served_model_source_priority(self):
         cases = [
@@ -159,14 +162,28 @@ class StrictModelTest(GatewayTestCase):
             with self.subTest(served=served):
                 fake = _FakeHTTP(_completion(model=body_model), headers)
                 llm = GatewayLLM("requested", strict_model=True)
-                with self.assertRaisesRegex(RuntimeError, f"requested requested but gateway served {served}"):
+                with self.assertRaisesRegex(ServedModelMismatch, f"requested requested but gateway served {served}"):
                     self.run_generate(llm, fake)
 
     def test_missing_served_model_fails(self):
         fake = _FakeHTTP(_completion())
         llm = GatewayLLM("m", strict_model=True)
-        with self.assertRaisesRegex(RuntimeError, "did not report the served model"):
+        with self.assertRaisesRegex(ServedModelMismatch, "did not report the served model"):
             self.run_generate(llm, fake)
+        self.assertEqual(len(fake.payloads), 1)
+
+    def test_transient_errors_still_retried(self):
+        calls = []
+
+        def flaky(req, timeout=None):
+            calls.append(req)
+            if len(calls) < 3:
+                raise OSError("connection reset")
+            return _Response(_completion(), {"x-manifest-model": "m"})
+
+        with mock.patch.object(gateway.urllib.request, "urlopen", flaky):
+            self.assertEqual(GatewayLLM("m", strict_model=True).generate("q", SCHEMA), {"answer": "42"})
+        self.assertEqual(len(calls), 3)
 
     def test_normalized_names_match(self):
         cases = [
@@ -193,13 +210,25 @@ class StrictModelTest(GatewayTestCase):
         os.environ.update({"OMB_JUDGE_LLM": "gateway", "OMB_JUDGE_MODEL": "deepseek-v4.1-flash",
                            "OMB_JUDGE_STRICT_MODEL": "1"})
         fake = _FakeHTTP(_completion(model="longcat-2.5-preview-free"))
-        with self.assertRaisesRegex(RuntimeError, "longcat-2.5-preview-free"):
+        with self.assertRaisesRegex(ServedModelMismatch, "longcat-2.5-preview-free"):
             self.run_generate(get_judge_llm(), fake)
 
     def test_env_strict_flag_rejects_unknown_value(self):
         os.environ.update({"OMB_ANSWER_LLM": "gateway", "OMB_ANSWER_STRICT_MODEL": "true"})
         with self.assertRaisesRegex(ValueError, "OMB_ANSWER_STRICT_MODEL must be 0 or 1"):
             get_answer_llm()
+
+    def test_strict_on_other_provider_warns(self):
+        class _Other(LLM):
+            def generate(self, prompt, schema):
+                return {}
+
+        os.environ.update({"OMB_JUDGE_LLM": "other", "OMB_JUDGE_STRICT_MODEL": "1"})
+        with mock.patch.dict(llm_pkg.REGISTRY, {"other": _Other}), \
+                self.assertLogs(llm_pkg.logger, "WARNING") as logs:
+            self.assertIsInstance(get_judge_llm(), _Other)
+        self.assertIn("OMB_JUDGE_STRICT_MODEL=1 has no effect", logs.output[0])
+        self.assertIn("'other'", logs.output[0])
 
 
 class DefaultOffTest(GatewayTestCase):

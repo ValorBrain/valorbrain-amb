@@ -49,6 +49,15 @@ def parse_extra_body(raw: str, source: str) -> dict:
     return value
 
 
+class ServedModelMismatch(RuntimeError):
+    """Strict model check failed: the gateway served (or reported) another model.
+
+    Not retried, and scoring code must re-raise it instead of scoring 0: a run
+    judged or answered by a substituted model has to fail, not look like a
+    regression.
+    """
+
+
 class GatewayLLM(LLM):
     """OpenAI-compatible LLM via plain HTTP, no response_format dependency."""
 
@@ -98,6 +107,9 @@ class GatewayLLM(LLM):
             try:
                 data = self._call(full_prompt)
                 return self._parse_json(data)
+            except ServedModelMismatch:
+                # Deterministic: the gateway keeps substituting, retrying only burns time.
+                raise
             except Exception as e:
                 if attempt < _MAX_RETRIES - 1:
                     time.sleep(delay)
@@ -143,12 +155,12 @@ class GatewayLLM(LLM):
         logger.debug("GatewayLLM requested=%s served=%s", self._model, served)
         if self._strict_model:
             if not served:
-                raise RuntimeError(
+                raise ServedModelMismatch(
                     f"strict model check: gateway did not report the served model "
                     f"(requested {self._model})"
                 )
             if normalize_model_name(served) != normalize_model_name(self._model):
-                raise RuntimeError(
+                raise ServedModelMismatch(
                     f"strict model check: requested {self._model} but gateway served {served}"
                 )
         choice = data.get("choices", [{}])[0]

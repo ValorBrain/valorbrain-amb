@@ -43,6 +43,7 @@ from ._cache import dataset_cache_dir
 from .base import Dataset
 from ..models import Document, Query, QueryResult
 from ..llm.base import LLM, Schema
+from ..llm.gateway import ServedModelMismatch
 
 logger = logging.getLogger(__name__)
 
@@ -674,6 +675,8 @@ Answer (YES or NO):"""
         try:
             result = llm.generate(prompt, schema)
             return result.get("answer", "").strip().upper().startswith("YES")
+        except ServedModelMismatch:
+            raise
         except Exception:
             return False
 
@@ -784,6 +787,8 @@ Return JSON: {{"score": <0.0 or 0.5 or 1.0>, "reason": "<one concise sentence>"}
                 return 0.5
             else:
                 return 0.0
+        except ServedModelMismatch:
+            raise
         except Exception as e:
             logger.warning("Rubric scoring failed: %s", e)
             return 0.0
@@ -808,6 +813,9 @@ Return JSON: {{"score": <0.0 or 0.5 or 1.0>, "reason": "<one concise sentence>"}
         # Batch all rubric items into a single judge call (4× fewer API calls)
         try:
             scores = self._rubric_batch_score(result.query, result.answer, rubric, llm)
+        except ServedModelMismatch:
+            # A substituted judge must fail the run, not degrade to per-item scoring.
+            raise
         except Exception:
             # Fallback: per-item scoring
             scores = []

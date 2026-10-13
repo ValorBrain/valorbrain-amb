@@ -1,12 +1,15 @@
+import logging
 import os
 
 from .base import LLM, Schema
 from .gemini import GeminiLLM
 from .groq import GroqLLM
-from .gateway import GatewayLLM, parse_extra_body
+from .gateway import GatewayLLM, ServedModelMismatch, parse_extra_body
 from .openai import OpenAILLM
 from .glm import GlmLLM
 from .agy_direct import AgyDirectLLM
+
+logger = logging.getLogger(__name__)
 
 REGISTRY: dict[str, type[LLM]] = {
     "gemini": GeminiLLM,
@@ -47,27 +50,35 @@ def _gateway_role_kwargs(role: str) -> dict:
     return kwargs
 
 
+def _role_llm(role: str, default_provider: str) -> LLM:
+    """Build the LLM for a role from OMB_<ROLE>_LLM / OMB_<ROLE>_MODEL (+ gateway settings)."""
+    provider_var = f"OMB_{role}_LLM"
+    provider = os.environ.get(provider_var, default_provider)
+    model = os.environ.get(f"OMB_{role}_MODEL")
+    cls = REGISTRY.get(provider)
+    if cls is None:
+        raise ValueError(f"Unknown {provider_var}: '{provider}'. Available: {list(REGISTRY)}")
+    if provider == "gateway":
+        kwargs = _gateway_role_kwargs(role)
+    else:
+        kwargs = {}
+        if os.environ.get(f"OMB_{role}_STRICT_MODEL", "").strip() == "1":
+            logger.warning(
+                "OMB_%s_STRICT_MODEL=1 has no effect: the served-model check exists only "
+                "for the gateway provider, and %s is %r", role, provider_var, provider,
+            )
+    return cls(model, **kwargs) if model else cls(**kwargs)
+
+
 def get_answer_llm() -> LLM:
     """Return the LLM to use for RAG answer generation.
     Configured via OMB_ANSWER_LLM (provider) and OMB_ANSWER_MODEL (optional model override);
     the gateway provider also reads OMB_ANSWER_{REASONING_EFFORT,BASE_URL,API_KEY,EXTRA_BODY,STRICT_MODEL}."""
-    provider = os.environ.get("OMB_ANSWER_LLM", "groq")
-    model = os.environ.get("OMB_ANSWER_MODEL")
-    cls = REGISTRY.get(provider)
-    if cls is None:
-        raise ValueError(f"Unknown OMB_ANSWER_LLM: '{provider}'. Available: {list(REGISTRY)}")
-    kwargs = _gateway_role_kwargs("ANSWER") if provider == "gateway" else {}
-    return cls(model, **kwargs) if model else cls(**kwargs)
+    return _role_llm("ANSWER", "groq")
 
 
 def get_judge_llm() -> LLM:
     """Return the LLM to use for evaluation/judging.
     Configured via OMB_JUDGE_LLM (provider) and OMB_JUDGE_MODEL (optional model override);
     the gateway provider also reads OMB_JUDGE_{REASONING_EFFORT,BASE_URL,API_KEY,EXTRA_BODY,STRICT_MODEL}."""
-    provider = os.environ.get("OMB_JUDGE_LLM", "gemini")
-    model = os.environ.get("OMB_JUDGE_MODEL")
-    cls = REGISTRY.get(provider)
-    if cls is None:
-        raise ValueError(f"Unknown OMB_JUDGE_LLM: '{provider}'. Available: {list(REGISTRY)}")
-    kwargs = _gateway_role_kwargs("JUDGE") if provider == "gateway" else {}
-    return cls(model, **kwargs) if model else cls(**kwargs)
+    return _role_llm("JUDGE", "gemini")
