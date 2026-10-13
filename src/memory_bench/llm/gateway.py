@@ -6,6 +6,7 @@ Uses prompt-based JSON extraction instead of structured output.
 """
 
 import json
+import logging
 import os
 import re
 import time
@@ -13,15 +14,47 @@ import urllib.request
 
 from .base import LLM, Schema
 
+logger = logging.getLogger(__name__)
+
 _MAX_RETRIES = 4
 _RETRY_DELAY = 5
+
+# Payload keys an extra body may not replace: they define what is being asked
+# and of which model, so the strict served-model check would be meaningless.
+_RESERVED_EXTRA_BODY_KEYS = ("model", "messages")
+
+# Response headers that name the model a gateway actually served, in priority
+# order; the JSON "model" field is the fallback.
+_SERVED_MODEL_HEADERS = ("x-valorbrain-gateway-model", "x-manifest-model")
+
+
+def normalize_model_name(name: str) -> str:
+    """Compare-friendly model name: last '/' segment, without a '-subscription' suffix.
+
+    'anthropic/claude-haiku-5-5' and 'claude-haiku-5-5-subscription' both become
+    'claude-haiku-5-5'.
+    """
+    base = name.strip().rsplit("/", 1)[-1]
+    return base.removesuffix("-subscription")
+
+
+def parse_extra_body(raw: str, source: str) -> dict:
+    """Parse an extra-body JSON object from `source` (an env var name, for errors)."""
+    try:
+        value = json.loads(raw)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"{source} is not valid JSON: {e}") from e
+    if not isinstance(value, dict):
+        raise ValueError(f"{source} must be a JSON object, got {type(value).__name__}")
+    return value
 
 
 class GatewayLLM(LLM):
     """OpenAI-compatible LLM via plain HTTP, no response_format dependency."""
 
     def __init__(self, model: str | None = None, reasoning_effort: str | None = None,
-                 base_url: str | None = None, api_key: str | None = None):
+                 base_url: str | None = None, api_key: str | None = None,
+                 extra_body: dict | None = None, strict_model: bool = False):
         # Base/key por papel: o leitor glm roda no coding plan da Z.ai
         # (assinatura), o juiz deepseek no gateway OpenCode local — quem paga
         # por token é só quem não tem assinatura.
@@ -32,6 +65,20 @@ class GatewayLLM(LLM):
         # +3,2pp com reasoning effort max — suporte que nunca chegou ao gateway.
         # Por papel: leitor lê OMB_ANSWER_REASONING_EFFORT, juiz OMB_JUDGE_REASONING_EFFORT.
         self._reasoning_effort = reasoning_effort or os.environ.get("OMB_GATEWAY_REASONING_EFFORT")
+        # Provider-specific request fields (e.g. Anthropic adaptive thinking via
+        # Manifest), merged into the payload last.
+        extra_body = dict(extra_body or {})
+        reserved = [k for k in _RESERVED_EXTRA_BODY_KEYS if k in extra_body]
+        if reserved:
+            raise ValueError(
+                f"GatewayLLM extra_body may not set {', '.join(reserved)}; "
+                "use the model argument instead"
+            )
+        self._extra_body = extra_body
+        # Strict: fail the call when the gateway served a different model than
+        # requested (a gateway that silently substitutes models otherwise passes
+        # the requested name into the results).
+        self._strict_model = strict_model
 
     @property
     def model_id(self) -> str:
@@ -73,6 +120,7 @@ class GatewayLLM(LLM):
         }
         if self._reasoning_effort:
             payload["reasoning_effort"] = self._reasoning_effort
+        payload.update(self._extra_body)
         body = json.dumps(payload).encode("utf-8")
 
         req = urllib.request.Request(
@@ -91,13 +139,41 @@ class GatewayLLM(LLM):
 
         with urllib.request.urlopen(req, timeout=180) as resp:
             data = json.loads(resp.read().decode("utf-8"))
-            msg = data.get("choices", [{}])[0].get("message", {})
-            content = (msg.get("content") or "").strip()
-            if content:
-                return content
-            # Reasoning fallback: when content is truncated away, the whole
-            # answer can live inside reasoning_content.
-            return (msg.get("reasoning_content") or "").strip()
+            served = self._served_model(resp.headers, data)
+        logger.debug("GatewayLLM requested=%s served=%s", self._model, served)
+        if self._strict_model:
+            if not served:
+                raise RuntimeError(
+                    f"strict model check: gateway did not report the served model "
+                    f"(requested {self._model})"
+                )
+            if normalize_model_name(served) != normalize_model_name(self._model):
+                raise RuntimeError(
+                    f"strict model check: requested {self._model} but gateway served {served}"
+                )
+        choice = data.get("choices", [{}])[0]
+        if choice.get("finish_reason") == "content_filter":
+            # Provider refusal (e.g. Anthropic stop_reason "refusal"): the answer
+            # stays empty and scores 0, but it must not pass unnoticed.
+            logger.warning(
+                "GatewayLLM content_filter: model %s refused (requested %s)",
+                served or self._model, self._model,
+            )
+        msg = choice.get("message", {})
+        content = (msg.get("content") or "").strip()
+        if content:
+            return content
+        # Reasoning fallback: when content is truncated away, the whole
+        # answer can live inside reasoning_content.
+        return (msg.get("reasoning_content") or "").strip()
+
+    @staticmethod
+    def _served_model(headers, data: dict) -> str | None:
+        for name in _SERVED_MODEL_HEADERS:
+            value = headers.get(name)
+            if value:
+                return value
+        return data.get("model") or None
 
     def _parse_json(self, text: str) -> dict:
         # Strip markdown fences if present

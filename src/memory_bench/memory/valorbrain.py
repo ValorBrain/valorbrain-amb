@@ -9,7 +9,7 @@ off in production.
 
 This provider talks to a running ValorBrain engine instance via its REST API.
 VALORBRAIN_URL, VALORBRAIN_TOKEN and VALORBRAIN_BENCHMARK_TENANT_ID are all
-REQUIRED — the provider refuses to start without them (see _guard_env).
+REQUIRED — the provider refuses to start without them (see __init__).
 
 Why: on 2026-09-18/19 six benchmark runs silently fell through the old defaults
 (VALORBRAIN_URL -> https://valorbrain-api.valor.digital = PRODUCTION, tenant ->
