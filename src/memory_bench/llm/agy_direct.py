@@ -21,7 +21,12 @@ class AgyDirectLLM(LLM):
         self._model = model or os.environ.get("AGY_MODEL", "gemini-3.6-flash")
         self._effort = os.environ.get("AGY_EFFORT", "low")
         # Long BEAM prompts (10k+ tokens of context) need more wall clock.
-        self._timeout = int(os.environ.get("AGY_TIMEOUT", "180"))
+        # Escalate per attempt (base + 30s) instead of a fixed ceiling: a fixed
+        # 180s on all retries killed whole gate runs mid-flight (observed
+        # 2026-08-30..09-13: subprocess.TimeoutExpired -> amb run died at
+        # n=100, three Sundays in a row, results truncated and unusable).
+        base_timeout = int(os.environ.get("AGY_TIMEOUT", "180"))
+        self._timeouts = [base_timeout + 30 * i for i in range(_MAX_RETRIES)]
 
     @property
     def model_id(self) -> str:
@@ -60,7 +65,7 @@ class AgyDirectLLM(LLM):
                     ],
                     capture_output=True,
                     text=True,
-                    timeout=self._timeout,
+                    timeout=self._timeouts[attempt],
                     env={**os.environ},
                 )
                 if result.returncode != 0:

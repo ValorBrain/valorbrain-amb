@@ -63,9 +63,9 @@ Copy into a `.env` at the repo root (AMB auto-loads it), or export in the shell.
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `VALORBRAIN_URL` | `http://localhost:7438` | Engine REST base URL |
-| `VALORBRAIN_TOKEN` | _(empty)_ | Auth bearer token |
-| `VALORBRAIN_BENCHMARK_TENANT_ID` | _(empty)_ | Tenant to scope all benchmark collections to |
+| `VALORBRAIN_URL` | _(required)_ | Engine REST base URL; the provider refuses to start without it |
+| `VALORBRAIN_TOKEN` | _(required)_ | Auth bearer token |
+| `VALORBRAIN_BENCHMARK_TENANT_ID` | _(required)_ | Dedicated bench tenant all benchmark collections are scoped to; real tenants are refused |
 
 **LLM providers**
 
@@ -89,6 +89,17 @@ Copy into a `.env` at the repo root (AMB auto-loads it), or export in the shell.
 | `OMB_ANSWER_MODEL` | _(none)_ | Optional model override for the answer LLM |
 | `OMB_JUDGE_LLM` | `gemini` | Provider for evaluation/judging — see [Judge override](#judge-override) |
 | `OMB_JUDGE_MODEL` | _(none)_ | Optional model override for the judge LLM |
+
+With the `gateway` provider, each role also reads its own `OMB_ANSWER_*` / `OMB_JUDGE_*` settings:
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `OMB_<ROLE>_BASE_URL` / `OMB_<ROLE>_API_KEY` | `OPENAI_BASE_URL` / `OPENAI_API_KEY` | Endpoint and key for that role |
+| `OMB_<ROLE>_REASONING_EFFORT` | _(none)_ | Sent as OpenAI-format `reasoning_effort` |
+| `OMB_<ROLE>_EXTRA_BODY` | _(none)_ | JSON object merged last into the chat/completions payload, e.g. `{"thinking":{"type":"adaptive"},"output_config":{"effort":"low"}}`. It may not set `model` or `messages`; invalid JSON aborts the run |
+| `OMB_<ROLE>_STRICT_MODEL` | `0` | `1`: every call fails unless the served model (header `x-valorbrain-gateway-model`, else `x-manifest-model`, else the response `model`) matches the requested one after dropping any `provider/` prefix and `-subscription` suffix. A mismatch is not retried and is never scored as 0: the whole run fails |
+
+The strict check compares model names only. Because the provider prefix is dropped, `openrouter/anthropic/x` and `anthropic/x` both match `x`: a gateway that keeps the model but switches provider is not detected. Strict also exists only for `gateway`; with any other provider, `OMB_<ROLE>_STRICT_MODEL=1` logs a warning and has no effect.
 
 **Datasets**
 

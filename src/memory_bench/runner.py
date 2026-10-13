@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 from .dataset.base import Dataset
 from .judge import GeminiJudge
+from .llm.gateway import ServedModelMismatch
 from .memory.base import MemoryProvider
 from .modes.base import ResponseMode
 from .models import EvalSummary, QueryResult
@@ -167,6 +168,8 @@ class EvalRunner:
             for _attempt in range(4):
                 try:
                     return await _process_one_attempt(q)
+                except ServedModelMismatch:
+                    raise
                 except Exception as exc:
                     msg = str(exc)
                     if _attempt < 3 and any(code in msg for code in ("502", "503", "529", "429", "overloaded", "quota")):
