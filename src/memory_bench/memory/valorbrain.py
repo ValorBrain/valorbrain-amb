@@ -143,6 +143,7 @@ class ValorBrainMemoryProvider(MemoryProvider):
         to_ingest: set[str] = set()
         collections_seen: set[str] = set()
         deduplicated: list[str] = []
+        failed_posts: list[str] = []
         for doc in documents:
             raw = (doc.user_id or "amb-default").lower()
             # Prefix is configurable so other splits (e.g. beam-10m) don't collide.
@@ -150,13 +151,9 @@ class ValorBrainMemoryProvider(MemoryProvider):
             if collection in self._ingested_collections:
                 continue
             if collection not in to_ingest:
-                try:
-                    stats = self._get_stats_collection(collection, timeout=15)
-                    if stats.get("collectionDocuments", 0) > 0:
-                        self._ingested_collections.add(collection)
-                        continue  # skip ingest — data already chunked and indexed
-                except Exception:
-                    pass
+                if self._collection_ready(collection):
+                    self._ingested_collections.add(collection)
+                    continue  # skip ingest — data already chunked, indexed and refined
                 to_ingest.add(collection)
             collections_seen.add(collection)
 
@@ -191,7 +188,7 @@ class ValorBrainMemoryProvider(MemoryProvider):
                 try:
                     result = self._post("/documents", body, timeout=300)
                 except Exception as e:
-                    logger.warning("ValorBrain ingest failed for %s/%s: %s", collection, w_path, e)
+                    failed_posts.append(f"{collection}/{w_path}: {e}")
                     return
                 # The engine stores identical content once per tenant: a window
                 # already indexed in another collection answers 200 with
@@ -206,11 +203,15 @@ class ValorBrainMemoryProvider(MemoryProvider):
             with ThreadPoolExecutor(max_workers=8) as pool:
                 list(pool.map(_post_window, windows))
 
-        if deduplicated:
+        if failed_posts or deduplicated:
             raise RuntimeError(
-                f"ValorBrain deduplicated {len(deduplicated)} window(s) into other collections of the "
-                f"bench tenant (e.g. {deduplicated[0]}): the same unit is already ingested under another "
-                "name. Purge it or use that collection prefix — refusing to measure a partial unit."
+                f"ValorBrain ingest incomplete: {len(failed_posts)} window(s) failed to post"
+                + (f" (e.g. {failed_posts[0]})" if failed_posts else "")
+                + f", {len(deduplicated)} deduplicated into other collections of the bench tenant"
+                + (f" (e.g. {deduplicated[0]}: the same unit is already ingested under another name)" if deduplicated else "")
+                + ". Refusing to measure a partial unit: purge the collection(s) "
+                + ", ".join(sorted(collections_seen))
+                + " (DELETE /documents/purge?collection=<c>&confirm=<c>) and run again."
             )
 
         # Wait for hybrid index on each collection that received documents.
@@ -219,6 +220,39 @@ class ValorBrainMemoryProvider(MemoryProvider):
                 self._wait_index(collection)
                 self._refine_collection(collection)
                 self._ingested_collections.add(collection)
+
+    def _collection_ready(self, collection: str) -> bool:
+        """True when the collection was ingested AND refined; False when empty.
+
+        Refine writes its digest and observations to `<collection>-obs`; a
+        collection with windows but an empty `-obs` was ingested partially or
+        interrupted before refine (the pre-fix provider left such units), and
+        measuring it would score a partial, unrefined unit. That case raises,
+        unless VALORBRAIN_ALLOW_UNREFINED=1. A failed /stats check is retried
+        and then raises: treating it as "empty" would re-post every window and
+        re-run refine on a collection that already exists.
+        """
+        last: Exception | None = None
+        for _ in range(3):
+            try:
+                docs = self._get_stats_collection(collection, timeout=15).get("collectionDocuments", 0)
+                if docs == 0:
+                    return False
+                obs = self._get_stats_collection(f"{collection}-obs", timeout=15).get("collectionDocuments", 0)
+                if obs > 0 or os.environ.get("VALORBRAIN_ALLOW_UNREFINED") == "1":
+                    return True
+                raise RuntimeError(
+                    f"ValorBrain collection {collection} has {docs} window(s) but {collection}-obs is empty: "
+                    "it was ingested partially or never refined. Purge it "
+                    f"(DELETE /documents/purge?collection={collection}&confirm={collection}) and run again, "
+                    "or set VALORBRAIN_ALLOW_UNREFINED=1 to measure it as it is."
+                )
+            except RuntimeError:
+                raise
+            except Exception as e:  # noqa: BLE001 — network/HTTP errors are retried
+                last = e
+                time.sleep(2)
+        raise RuntimeError(f"ValorBrain /stats failed for {collection} after 3 attempts: {last}")
 
     def _wait_index(self, collection: str, timeout: float = 600) -> None:
         """Poll GET /stats?collection= until the collection's hybrid index is ready.
@@ -229,6 +263,7 @@ class ValorBrainMemoryProvider(MemoryProvider):
         the full window only stalls the run.
         """
         deadline = time.time() + timeout
+        stats: dict = {}
         while time.time() < deadline:
             try:
                 stats = self._get_stats_collection(collection, timeout=30)
@@ -242,6 +277,11 @@ class ValorBrainMemoryProvider(MemoryProvider):
             except Exception:
                 pass
             time.sleep(2)
+        logger.warning(
+            "ValorBrain index wait for %s gave up after %ss (documents=%s pending=%s failed=%s)",
+            collection, timeout, stats.get("collectionDocuments"), stats.get("collectionHybridPending"),
+            stats.get("collectionEmbedFailed"),
+        )
 
     def _refine_collection(self, collection: str, timeout: float = 1800) -> None:
         """Extract observations + consolidate after ingest, before queries.
@@ -259,15 +299,17 @@ class ValorBrainMemoryProvider(MemoryProvider):
                 {"collection": collection},
                 timeout=timeout,
             )
-            logger.info(
-                "Refine %s: observed=%s extracted=%s consolidated=%s",
-                collection,
-                result.get("observed", 0),
-                result.get("extracted", 0),
-                result.get("consolidated", 0),
-            )
         except Exception as e:
-            logger.warning("Refine failed for %s: %s (continuing)", collection, e)
+            # Measuring before refine finished scores raw windows without the
+            # derived memory: a failed refine fails the run.
+            raise RuntimeError(f"ValorBrain refine failed for {collection}: {e}") from e
+        logger.info(
+            "Refine %s: observed=%s extracted=%s consolidated=%s",
+            collection,
+            result.get("observed", 0),
+            result.get("extracted", 0),
+            result.get("consolidated", 0),
+        )
 
     def retrieve(
         self,
