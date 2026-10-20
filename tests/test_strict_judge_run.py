@@ -90,12 +90,25 @@ class BeamScoreResultTest(unittest.TestCase):
         with self.assertRaises(ServedModelMismatch):
             BEAMDataset._llm_equivalence("a", "b", llm)
 
-    def test_other_judge_errors_still_score_zero(self):
+    def test_other_judge_errors_are_never_a_zero(self):
+        # FB-0220 (ValorBrain): a judge that answers 429 used to score the item 0.0 and the run
+        # ended normally. The error now reaches the runner (it retries transient ones).
         llm = mock.Mock()
-        llm.generate.side_effect = RuntimeError("GatewayLLM failed after 4 retries: timeout")
-        self.assertEqual(BEAMDataset().score_result(self._result(), llm), 0.0)
-        # Batch call + one per-item call per rubric entry: today's fallback is unchanged.
-        self.assertEqual(llm.generate.call_count, 3)
+        llm.generate.side_effect = RuntimeError("GatewayLLM failed after 4 retries: HTTP Error 429: Too Many Requests")
+        with self.assertRaisesRegex(RuntimeError, "429"):
+            BEAMDataset().score_result(self._result(), llm)
+        # Batch call, then the per-item fallback's first call, which raises.
+        self.assertEqual(llm.generate.call_count, 2)
+        with self.assertRaisesRegex(RuntimeError, "429"):
+            BEAMDataset._rubric_item_score("q", "a", "item", llm)
+        with self.assertRaisesRegex(RuntimeError, "429"):
+            BEAMDataset._llm_equivalence("a", "b", llm)
+
+    def test_a_judge_that_answers_still_scores(self):
+        llm = mock.Mock()
+        llm.generate.side_effect = [RuntimeError("batch prompt failed"), {"score": 1.0, "reason": "ok"},
+                                    {"score": 0.5, "reason": "partial"}]
+        self.assertEqual(BEAMDataset().score_result(self._result(), llm), 0.75)
 
 
 if _IMPORT_ERROR is None:

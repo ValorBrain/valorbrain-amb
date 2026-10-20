@@ -672,13 +672,9 @@ Answer (YES or NO):"""
             properties={"answer": {"type": "string", "description": "YES or NO"}},
             required=["answer"],
         )
-        try:
-            result = llm.generate(prompt, schema)
-            return result.get("answer", "").strip().upper().startswith("YES")
-        except ServedModelMismatch:
-            raise
-        except Exception:
-            return False
+        # A failed judge call is not a "NO" (FB-0220): the error goes up, as in _rubric_item_score.
+        result = llm.generate(prompt, schema)
+        return result.get("answer", "").strip().upper().startswith("YES")
 
     @staticmethod
     def _align_with_llm(reference: list[str], system: list[str], llm: LLM) -> tuple[list[str], list[str]]:
@@ -777,20 +773,19 @@ Return JSON: {{"score": <0.0 or 0.5 or 1.0>, "reason": "<one concise sentence>"}
             },
             required=["score", "reason"],
         )
-        try:
-            result = llm.generate(prompt, schema)
-            raw = float(result.get("score", 0))
-            # Clamp to nearest valid value
-            if raw >= 0.75:
-                return 1.0
-            elif raw >= 0.25:
-                return 0.5
-            else:
-                return 0.0
-        except ServedModelMismatch:
-            raise
-        except Exception as e:
-            logger.warning("Rubric scoring failed: %s", e)
+        # A judge failure is never a score (FB-0220, ValorBrain): the 0.0 this used to return on
+        # any error — an HTTP 429 from the judge under parallel runs, a timeout — counted as the
+        # answer failing the criterion, and the run ended normally with the item zeroed (80 items
+        # in one batch of runs). The error goes up: the runner retries transient ones and fails the
+        # run on the rest, like ServedModelMismatch.
+        result = llm.generate(prompt, schema)
+        raw = float(result.get("score", 0))
+        # Clamp to nearest valid value
+        if raw >= 0.75:
+            return 1.0
+        elif raw >= 0.25:
+            return 0.5
+        else:
             return 0.0
 
     def score_result(self, result: QueryResult, llm: LLM) -> float:
