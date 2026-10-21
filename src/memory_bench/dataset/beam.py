@@ -783,7 +783,10 @@ Return JSON: {{"score": <0.0 or 0.5 or 1.0>, "reason": "<one concise sentence>"}
         # in one batch of runs). The error goes up: the runner retries transient ones and fails the
         # run on the rest, like ServedModelMismatch. A reply without a score is no 0 either.
         result = llm.generate(prompt, schema)
-        raw = float(result["score"])
+        try:
+            raw = float(result["score"])
+        except (KeyError, TypeError, ValueError) as e:
+            raise ValueError(f"rubric judge gave no numeric score ({result!r:.200})") from e
         # Clamp to nearest valid value
         if raw >= 0.75:
             return 1.0
