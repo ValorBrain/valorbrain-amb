@@ -673,8 +673,12 @@ Answer (YES or NO):"""
             required=["answer"],
         )
         # A failed judge call is not a "NO" (FB-0220): the error goes up, as in _rubric_item_score.
+        # Neither is a reply without an answer (the gateway turns an empty reply into "").
         result = llm.generate(prompt, schema)
-        return result.get("answer", "").strip().upper().startswith("YES")
+        answer = result.get("answer")
+        if not isinstance(answer, str) or not answer.strip():
+            raise ValueError(f"equivalence judge gave no answer: {result!r:.200}")
+        return answer.strip().upper().startswith("YES")
 
     @staticmethod
     def _align_with_llm(reference: list[str], system: list[str], llm: LLM) -> tuple[list[str], list[str]]:
@@ -777,9 +781,9 @@ Return JSON: {{"score": <0.0 or 0.5 or 1.0>, "reason": "<one concise sentence>"}
         # any error — an HTTP 429 from the judge under parallel runs, a timeout — counted as the
         # answer failing the criterion, and the run ended normally with the item zeroed (80 items
         # in one batch of runs). The error goes up: the runner retries transient ones and fails the
-        # run on the rest, like ServedModelMismatch.
+        # run on the rest, like ServedModelMismatch. A reply without a score is no 0 either.
         result = llm.generate(prompt, schema)
-        raw = float(result.get("score", 0))
+        raw = float(result["score"])
         # Clamp to nearest valid value
         if raw >= 0.75:
             return 1.0
@@ -812,7 +816,7 @@ Return JSON: {{"score": <0.0 or 0.5 or 1.0>, "reason": "<one concise sentence>"}
             # A substituted judge must fail the run, not degrade to per-item scoring.
             raise
         except Exception:
-            # Fallback: per-item scoring
+            # Fallback: per-item scoring, also when the batch reply did not grade every item.
             scores = []
             for item in rubric:
                 s = self._rubric_item_score(result.query, result.answer, item, llm)
@@ -849,15 +853,23 @@ One score object per criterion, in order."""
             required=["scores"],
         )
         result = llm.generate(prompt, schema)
-        raw_scores = result.get("scores", [])
+        # Only what the judge graded counts (FB-0220): no padding with 0.0 for missing scores, no
+        # cutting extra ones, no default for an item without a score. A reply that does not grade
+        # every item one by one raises, and score_result scores item by item instead.
+        raw_scores = result.get("scores")
+        if not isinstance(raw_scores, list):
+            raise ValueError(f"judge batch: 'scores' is not a list ({type(raw_scores).__name__})")
+        if len(raw_scores) != len(rubric):
+            raise ValueError(f"judge batch: {len(raw_scores)} scores for {len(rubric)} rubric items")
         out = []
-        for rs in raw_scores:
-            v = float(rs.get("score", 0))
+        for i, rs in enumerate(raw_scores, 1):
+            try:
+                v = float(rs["score"])
+            except (KeyError, TypeError, ValueError) as e:
+                raise ValueError(f"judge batch: item {i} has no numeric score ({rs!r:.120})") from e
             out.append(1.0 if v >= 0.75 else (0.5 if v >= 0.25 else 0.0))
-        # Pad if model returned fewer scores than rubric items
-        while len(out) < len(rubric):
-            out.append(0.0)
-        return out[:len(rubric)]
+        return out
+
     def dataset_stats(self, console: Console, **_) -> None:
         table = Table(title="BEAM dataset stats")
         table.add_column("Split", style="bold")

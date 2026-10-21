@@ -10,6 +10,7 @@ import logging
 import os
 import re
 import time
+import urllib.error
 import urllib.request
 
 from .base import LLM, Schema
@@ -26,6 +27,10 @@ _RESERVED_EXTRA_BODY_KEYS = ("model", "messages")
 # Response headers that name the model a gateway actually served, in priority
 # order; the JSON "model" field is the fallback.
 _SERVED_MODEL_HEADERS = ("x-valorbrain-gateway-model", "x-manifest-model")
+
+# HTTP statuses after which another try may succeed: rate limit, server and
+# gateway errors, Anthropic's 529 overloaded.
+TRANSIENT_HTTP_STATUS = frozenset({429, 500, 502, 503, 504, 529})
 
 
 def normalize_model_name(name: str) -> str:
@@ -56,6 +61,24 @@ class ServedModelMismatch(RuntimeError):
     judged or answered by a substituted model has to fail, not look like a
     regression.
     """
+
+
+class TransientLLMError(RuntimeError):
+    """The gateway gave up on an error that may pass on its own: an HTTP status
+    in TRANSIENT_HTTP_STATUS or a timeout ("The read operation timed out").
+
+    The runner retries the call that raised it; any other gateway error is final.
+    """
+
+
+def is_transient_error(e: BaseException) -> bool:
+    """An HTTP status in TRANSIENT_HTTP_STATUS, or a timeout."""
+    if isinstance(e, urllib.error.HTTPError):
+        return e.code in TRANSIENT_HTTP_STATUS
+    if isinstance(e, TimeoutError):  # socket.timeout during the read
+        return True
+    # A timeout before the response arrives comes wrapped in a URLError.
+    return isinstance(e, urllib.error.URLError) and isinstance(e.reason, TimeoutError)
 
 
 class GatewayLLM(LLM):
@@ -115,7 +138,8 @@ class GatewayLLM(LLM):
                     time.sleep(delay)
                     delay *= 2
                 else:
-                    raise RuntimeError(f"GatewayLLM failed after {_MAX_RETRIES} retries: {e}")
+                    error = TransientLLMError if is_transient_error(e) else RuntimeError
+                    raise error(f"GatewayLLM failed after {_MAX_RETRIES} retries: {e}") from e
 
     def _call(self, prompt: str) -> str:
         url = f"{self._base}/chat/completions"

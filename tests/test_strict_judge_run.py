@@ -1,7 +1,7 @@
 """A strict served-model mismatch must fail the run, never score 0 and carry on.
 
-BEAM scoring falls back to per-item scoring and scores 0 on judge errors, and the
-runner re-scores 0s; ServedModelMismatch has to cut through all of them.
+BEAM scoring falls back to per-item scoring, and the runner retries transient judge
+errors; ServedModelMismatch has to cut through both, with no retry.
 
 These tests import the full runner (memory providers, datasets), so they need the
 project environment: `uv run --with pytest pytest tests/`. They are skipped under the

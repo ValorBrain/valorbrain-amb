@@ -17,12 +17,63 @@ logger = logging.getLogger(__name__)
 
 from .dataset.base import Dataset
 from .judge import GeminiJudge
-from .llm.gateway import ServedModelMismatch
+from .llm.gateway import ServedModelMismatch, TransientLLMError, is_transient_error
 from .memory.base import MemoryProvider
 from .modes.base import ResponseMode
 from .models import EvalSummary, QueryResult
 
 console = Console()
+
+
+class JudgeError(RuntimeError):
+    """The judge failed for good: after the retries of a transient error, or on any other error.
+
+    The query's answer already exists, so the per-query retry does not run it again (FB-0220).
+    """
+
+
+# How LLM clients without a typed error report a rate limit, an overload or a timeout. Words
+# only, never a bare status number: a JSON parse error reads "(char 429)".
+_TRANSIENT_WORDS = ("too many requests", "rate limit", "resource_exhausted", "quota", "overloaded",
+                    "bad gateway", "service unavailable", "gateway timeout", "timed out")
+
+
+def _is_transient(exc: BaseException) -> bool:
+    """Whether an LLM error may pass on its own, so the call is worth repeating.
+
+    Typed first, along the explicit cause chain: the gateway's TransientLLMError, an HTTPError with
+    a transient status, a timeout (urllib's "The read operation timed out" is a TimeoutError). Then
+    the words other clients put in their messages. A JudgeError is final.
+    """
+    if isinstance(exc, JudgeError):
+        return False
+    seen: set[int] = set()
+    e: BaseException | None = exc
+    while e is not None and id(e) not in seen:
+        seen.add(id(e))
+        if isinstance(e, TransientLLMError) or is_transient_error(e):
+            return True
+        e = e.__cause__
+    msg = str(exc).lower()
+    return any(word in msg for word in _TRANSIENT_WORDS)
+
+
+async def _retry_transient(label: str, call):
+    """Await `call()`, repeating it on a transient error: 4 attempts, 15, 30 and 60 s apart."""
+    for attempt in range(4):
+        try:
+            return await call()
+        except ServedModelMismatch:
+            raise
+        except Exception as exc:
+            if attempt < 3 and _is_transient(exc):
+                wait = 15 * (2 ** attempt)
+                logger.warning("[%s] transient error (attempt %d/4), retrying in %ds: %s",
+                               label, attempt + 1, wait, str(exc)[:120])
+                await asyncio.sleep(wait)
+            else:
+                raise
+    raise RuntimeError("unreachable")
 
 
 def _score_mcq(answer: str, gold_answers: list[str]) -> tuple[bool, str]:
@@ -165,20 +216,10 @@ class EvalRunner:
             return dataset.build_rag_prompt(query, context, task_type, split, category, meta)
 
         async def _process_one(q) -> QueryResult:
-            for _attempt in range(4):
-                try:
-                    return await _process_one_attempt(q)
-                except ServedModelMismatch:
-                    raise
-                except Exception as exc:
-                    msg = str(exc)
-                    if _attempt < 3 and any(code in msg for code in ("502", "503", "529", "429", "overloaded", "quota")):
-                        wait = 15 * (2 ** _attempt)
-                        logger.warning("[query:%s] transient error (attempt %d/4), retrying in %ds: %s", q.id, _attempt + 1, wait, msg[:120])
-                        await asyncio.sleep(wait)
-                    else:
-                        raise
-            raise RuntimeError("unreachable")
+            # A transient error repeats the whole query (retrieval and reader). The judge's own
+            # failures come as JudgeError, which is never repeated here: the judge was already
+            # retried alone, keeping the answer.
+            return await _retry_transient(f"query:{q.id}", lambda: _process_one_attempt(q))
 
         async def _process_one_attempt(q) -> QueryResult:
             t_start = time.perf_counter()
@@ -231,16 +272,17 @@ class EvalRunner:
                     meta=q.meta,
                 )
                 judge_llm = self._get_judge(dataset)._llm
-                score = await asyncio.to_thread(dataset.score_result, tmp_result, judge_llm)
-                score = float(score)
-                # Retry judge if answer is non-empty but score is 0 (likely judge failure).
-                # Observed: 45/400 questions get score=0 with valid answers due to
-                # AGY/Gemini quota or inconsistency. Retry once before accepting.
-                if score == 0.0 and answer_result.answer.strip():
-                    import time as _t
-                    _t.sleep(3)
-                    score = await asyncio.to_thread(dataset.score_result, tmp_result, judge_llm)
-                    score = float(score)
+                # Only the judge call is repeated on a transient error; the answer stands. The score
+                # is what the judge said (FB-0220): a judge failure raises instead of scoring, so a
+                # 0 is the judge's and is not drawn again (the old re-score of zeros only inflated
+                # the mean once failures stopped being zeros).
+                try:
+                    score = float(await _retry_transient(
+                        f"query:{q.id} judge", lambda: asyncio.to_thread(dataset.score_result, tmp_result, judge_llm)))
+                except ServedModelMismatch:
+                    raise
+                except Exception as exc:
+                    raise JudgeError(f"[query:{q.id}] judge failed: {exc}") from exc
                 correct = score >= 0.5
                 judge_reason = f"score={score:.3f}"
             else:
